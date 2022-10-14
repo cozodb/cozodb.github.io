@@ -1,0 +1,473 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Stored relations and transactions" href="stored.html" /><link rel="prev" title="Getting started" href="setup.html" />
+
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+        <title>Queries - Cozo Manual</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Cozo Manual</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Cozo Manual</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Getting started</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="execution.html">Execution of queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Utilities and algorithms</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="queries">
+<h1>Queries<a class="headerlink" href="#queries" title="Permalink to this heading">#</a></h1>
+<p>The Cozo database system is queried using the CozoScript language.
+At its core, CozoScript is a <a class="reference external" href="https://en.wikipedia.org/wiki/Datalog">Datalog</a> dialect
+supporting stratified negation and stratified recursive meet-aggregations.
+The built-in native algorithms (mainly graph algorithms) further empower
+CozoScript for much greater ease of use and much wider applicability.</p>
+<p>A query consists of one or many named rules.
+Each named rule conceptually represents a relation or a table with rows and columns.
+The rule named <code class="docutils literal notranslate"><span class="pre">?</span></code> is called the entry to the query,
+and its associated relation is returned as the result of the query.
+Each named rule has associated with it a rule head, which names the columns of the relation,
+and a rule body, which specifies the content of the relation, or how the content should be computed.</p>
+<p>In CozoScript, relations (stored relations or relations defined by rules) abide by the <em>set semantics</em>,
+meaning that even if a rule may compute a row multiple times, it will occur only once in the output.
+This is in contradistinction to SQL.</p>
+<p>There are three types of named rules in CozoScript: constant rules, Horn-clause rules and algorithm applications.</p>
+<section id="constant-rules">
+<h2>Constant rules<a class="headerlink" href="#constant-rules" title="Permalink to this heading">#</a></h2>
+<p>The following is an example of a constant rule:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const_rule</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>Constant rules are distinguished by the symbol <code class="docutils literal notranslate"><span class="pre">&lt;-</span></code> separating the rule head and rule body.
+The rule body should be an expression evaluating to a list of lists:
+every subslist of the rule body should be of the same length (the <em>arity</em> of the rule),
+and must match the number of arguments in the rule head.
+In general, if you are passing data into the query,
+you should take advantage of named parameters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>const_rule[a, b, c] &lt;- $data_passed_in
+</pre></div>
+</div>
+<p>and pass a map containing a key of <code class="docutils literal notranslate"><span class="pre">&quot;data_passed_in&quot;</span></code> with a value of a list of lists.</p>
+<p>The rule head may be omitted if the rule body is not the empty list:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const_rule</span><span class="p">[]</span> <span class="o">&lt;-</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>in which case the system will deduce the arity of the rule from the data.</p>
+</section>
+<section id="horn-clause-rules">
+<h2>Horn-clause rules<a class="headerlink" href="#horn-clause-rules" title="Permalink to this heading">#</a></h2>
+<p>An example of a Horn-clause rule is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hc_rule</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">]</span> <span class="o">:=</span> <span class="n">rule_a</span><span class="p">[</span><span class="s1">&#39;constant_string&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">],</span> <span class="n">rule_b</span><span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>As can be seen, Horn-clause rules are distinguished by the symbol <code class="docutils literal notranslate"><span class="pre">:=</span></code> separating the rule head and rule body.
+The rule body of a Horn-clause rule consists of multiple <em>atoms</em> joined by commas,
+and is interpreted as representing the <em>conjunction</em> of these atoms.</p>
+<section id="atoms">
+<h3>Atoms<a class="headerlink" href="#atoms" title="Permalink to this heading">#</a></h3>
+<p>Atoms come in various flavours.
+In the example above:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rule_a</span><span class="p">[</span><span class="s1">&#39;constant_string&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>is an atom representing a <em>rule application</em>: a rule named <code class="docutils literal notranslate"><span class="pre">rule_a</span></code> must exist in the same query
+and have the correct arity (2 here).
+Each row in the named rule is then <em>unified</em> with the bindings given as parameters in the square bracket:
+here the first column is unified with a constant string, and unification succeeds only when the string
+completely matches what is given;
+the second column is unified with the <em>variable</em> <code class="docutils literal notranslate"><span class="pre">b</span></code>,
+and as the variable is fresh at this point (meaning that it first appears here),
+the unification will always succeed and the variable will become <em>bound</em>:
+from this point take on the value of whatever it was
+unified with in the named relation.</p>
+<p>When a bound variable is used again later, for example in <code class="docutils literal notranslate"><span class="pre">rule_b[b,</span> <span class="pre">d,</span> <span class="pre">a,</span> <span class="pre">e]</span></code>, the variable <code class="docutils literal notranslate"><span class="pre">b</span></code> was bound
+at this point, this unification will only succeed when the unified value is the same as the previously unified value.
+In other words, repeated use of the same variable in named rules corresponds to inner joins in relational algebra.</p>
+<p>Another flavour of atoms is the <em>stored relation</em>. It may be written similarly to a rule application:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">stored_relation</span><span class="p">[</span><span class="n">bind1</span><span class="p">,</span> <span class="n">bind2</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>with the colon in front of the stored relation name to distinguish it from rule application.
+Written in this way, you must give as many bindings to the stored relation as its arity,
+and the bindings proceed by argument positions, which may be cumbersome and error-prone.
+So alternatively, you may use the fact that columns of a stored relation are always named and bind by name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">stored_relation</span><span class="p">{</span><span class="n">col1</span><span class="p">:</span> <span class="n">bind1</span><span class="p">,</span> <span class="n">col2</span><span class="p">:</span> <span class="n">bind2</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>In this case, you only need to bind as many variables as you use.
+If the name you want to give the binding is the same as the name of the column, you may use the shorthand notation:
+<code class="docutils literal notranslate"><span class="pre">:stored_relation{col1}</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">:stored_relation{col1:</span> <span class="pre">col1}</span></code>.</p>
+<p><em>Expressions</em> are also atoms, such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> must be bound somewhere else in the rule, and the expression must evaluate to a boolean, and act as a <em>filter</em>: only rows where the expression evaluates to true are kept.</p>
+<p>You can also use <em>unification atoms</em> to unify explicitly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span>
+</pre></div>
+</div>
+<p>for such atoms, whatever appears on the left-hand side must be a single variable and is unified with the right-hand side.
+This is different from the equality operator <code class="docutils literal notranslate"><span class="pre">==</span></code>,
+where both sides are merely required to be expressions.
+When the left-hand side is a single <em>bound</em> variable,
+it may be shown that the equality and the unification operators are semantically equivalent.</p>
+<p>Another form of <em>unification atom</em> is the explicit multi-unification:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>here the variable on the left-hand side of <code class="docutils literal notranslate"><span class="pre">in</span></code> is unified with each item on the right-hand side in turn,
+which in turn implies that the right-hand side must evaluate to a list
+(but may be represented by a single variable or a function call).</p>
+</section>
+<section id="head-and-returned-relation">
+<h3>Head and returned relation<a class="headerlink" href="#head-and-returned-relation" title="Permalink to this heading">#</a></h3>
+<p>Atoms, as explained above, corresponds to either relations (or their projections) or filters in relational algebra.
+Linked by commas, they, therefore, represent a joined relation, with named columns.
+The <em>head</em> of the rule, which in the simplest case is just a list of variables,
+then defines whichever columns to keep, and their order in the output relation.</p>
+<p>Each variable in the head must be bound in the body, this is one of the <em>safety rules</em> of Datalog.</p>
+</section>
+<section id="multiple-definitions-and-disjunction">
+<h3>Multiple definitions and disjunction<a class="headerlink" href="#multiple-definitions-and-disjunction" title="Permalink to this heading">#</a></h3>
+<p>For Horn-clause rules only, multiple rule definitions may share the same name,
+with the requirement that the arity of the head in each definition must match.
+The returned relation is then the <em>disjunction</em> of the multiple definitions,
+which correspond to <em>union</em> in SQL.
+<em>Intersect</em> in SQL can be written in CozoScript into a single rule since commas denote conjunction.
+In complicated situations, you may instead write disjunctions in a single rule with the explicit <code class="docutils literal notranslate"><span class="pre">or</span></code> operator:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rule1</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span> <span class="o">:=</span> <span class="n">rule2</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">or</span> <span class="n">rule3</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">rule4</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>For completeness, there is also an explicit <code class="docutils literal notranslate"><span class="pre">and</span></code> operator, but it is semantically identical to the comma, except that
+it has higher operator precedence than <code class="docutils literal notranslate"><span class="pre">or</span></code>, which in turn has higher operator precedence than the comma.</p>
+<p>During evaluation, each rule is canonicalized into disjunction normal form
+and each clause of the outmost disjunction is treated as a separate rule.
+The consequence is that the safety rule may be violated
+even though textually every variable in the head occurs in the body.
+As an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span> <span class="o">:=</span> <span class="n">rule1</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">or</span> <span class="n">rule2</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>is a violation of the safety rule since it is rewritten into two rules, each of which is missing a different binding.</p>
+</section>
+<section id="negation">
+<h3>Negation<a class="headerlink" href="#negation" title="Permalink to this heading">#</a></h3>
+<p>Atoms in Horn clauses may be <em>negated</em> by putting <code class="docutils literal notranslate"><span class="pre">not</span></code> in front of them, as in:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ow">not</span> <span class="n">rule1</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>When negating rule applications and stored relations,
+at least one binding must be bound somewhere else in the rule in a non-negated context:
+this is another safety rule of Datalog, and it ensures that the outputs of rules are always finite.
+The unbound bindings in negated rules remain unbound: negation cannot introduce bound bindings to be used in the head.</p>
+<p>Negated expressions act as negative filters,
+which is semantically equivalent to putting <code class="docutils literal notranslate"><span class="pre">!</span></code> in front of the expression.
+Since negation does not introduce new bindings,
+unifications and multi-unifications are converted to equivalent expressions and then negated.</p>
+</section>
+<section id="recursion-and-stratification">
+<h3>Recursion and stratification<a class="headerlink" href="#recursion-and-stratification" title="Permalink to this heading">#</a></h3>
+<p>The body of a Horn-clause rule may contain rule applications of itself,
+and multiple Horn-clause rules may apply each other recursively.
+The only exception is the entry rule <code class="docutils literal notranslate"><span class="pre">?</span></code>, which cannot be referred to by other rules.</p>
+<p>Self and mutual references allow recursion to be defined easily. To guard against semantically pathological cases,
+recursion cannot occur in negated positions: the Russell-style rule <code class="docutils literal notranslate"><span class="pre">r[a]</span> <span class="pre">:=</span> <span class="pre">not</span> <span class="pre">r[a]</span></code> is not allowed.
+This requirement creates an ordering of the rules, since
+negated rules must evaluate to completion before rules that apply them can start evaluation:
+this is called <em>stratification</em> of the rules.
+In cases where a total ordering cannot be defined since there exists a loop in the ordering
+required by negation, the query is then deemed unstratifiable and Cozo will refuse to execute it.</p>
+<p>Note that since CozoScript allows unifying fresh variables, you can still easily write programs that produce
+infinite relations and hence cannot complete through recursion, but that are still accepted by the database.
+One of the simplest examples is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>r[a] := a = 0
+r[a] := r[b], a = b + 1
+?[a] := r[a]
+</pre></div>
+</div>
+<p>It is up to the user to ensure that such programs are not submitted to the database,
+as it is not even in principle possible for the database to rule out such cases without wrongly rejecting valid queries.
+If you accidentally submitted one, you can refer to the system ops section for how to terminate long-running queries.
+Or you can give a timeout for the query when you submit.</p>
+</section>
+</section>
+<section id="algorithm-application">
+<h2>Algorithm application<a class="headerlink" href="#algorithm-application" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="query-options">
+<h2>Query options<a class="headerlink" href="#query-options" title="Permalink to this heading">#</a></h2>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="stored.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Stored relations and transactions</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="setup.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Getting started</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Ziyang Hu
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Queries</a><ul>
+<li><a class="reference internal" href="#constant-rules">Constant rules</a></li>
+<li><a class="reference internal" href="#horn-clause-rules">Horn-clause rules</a><ul>
+<li><a class="reference internal" href="#atoms">Atoms</a></li>
+<li><a class="reference internal" href="#head-and-returned-relation">Head and returned relation</a></li>
+<li><a class="reference internal" href="#multiple-definitions-and-disjunction">Multiple definitions and disjunction</a></li>
+<li><a class="reference internal" href="#negation">Negation</a></li>
+<li><a class="reference internal" href="#recursion-and-stratification">Recursion and stratification</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#algorithm-application">Algorithm application</a></li>
+<li><a class="reference internal" href="#query-options">Query options</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>

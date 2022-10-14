@@ -1,0 +1,369 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Queries" href="queries.html" /><link rel="prev" title="Introduction" href="intro.html" />
+
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+        <title>Getting started - Cozo Manual</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Cozo Manual</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Cozo Manual</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="execution.html">Execution of queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Utilities and algorithms</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this heading">#</a></h1>
+<p>Cozo is distributed as a single executable. To get started, download the executable for your platform and uncompress it. After decompression, you may also need to give it executable permission by <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">./cozo</span></code> on Unix-based systems.</p>
+<p>The pre-compiled distributions of Cozo support Linux, Mac and Windows. As building on Windows is very different from building on UNIX-based systems, the Windows build hasn’t received as much attention as the other builds and may suffer from inferior performance and Windows-specific bugs. For Windows users, we recommend running Cozo under <a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL</a> if possible, especially if your workload is heavy.</p>
+<section id="running-cozo">
+<h2>Running Cozo<a class="headerlink" href="#running-cozo" title="Permalink to this heading">#</a></h2>
+<p>Run the <code class="docutils literal notranslate"><span class="pre">cozo</span></code> command in a terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">cozo</span> <span class="n">PATH_TO_DATA_DIRECTORY</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">PATH_TO_DATA_DIRECTORY</span></code> does not exist, it will be created. Cozo will then start a web server and bind to address <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and port <code class="docutils literal notranslate"><span class="pre">9070</span></code>. These two can be customized: run the executable with the <code class="docutils literal notranslate"><span class="pre">-h</span></code> option to learn how.</p>
+<p>To stop Cozo, type <code class="docutils literal notranslate"><span class="pre">CTRL-C</span></code> in the terminal, or send <code class="docutils literal notranslate"><span class="pre">SIGTERM</span></code> to the process with e.g. <code class="docutils literal notranslate"><span class="pre">kill</span></code>.</p>
+</section>
+<section id="the-query-api">
+<h2>The query API<a class="headerlink" href="#the-query-api" title="Permalink to this heading">#</a></h2>
+<p>Queries are run by sending HTTP POST requests to the server. By default, the API endpoint is <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:9070/text-query</span></code>. The structure of the expected JSON payload is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;script&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;COZOSCRIPT QUERY STRING&gt;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">params</span></code> should be an object of named parameters. For example, if you have <code class="docutils literal notranslate"><span class="pre">params</span></code> set up to be <code class="docutils literal notranslate"><span class="pre">{&quot;num&quot;:</span> <span class="pre">1}</span></code>, then <code class="docutils literal notranslate"><span class="pre">$num</span></code> can be used anywhere in your query string where an expression is expected. Always use <code class="docutils literal notranslate"><span class="pre">params</span></code> instead of constructing query strings yourself when you have parametrized queries.</p>
+</section>
+<section id="security">
+<h2>Security<a class="headerlink" href="#security" title="Permalink to this heading">#</a></h2>
+<p>Cozo is currently designed to run in a trusted environment and be used by trusted clients, therefore it does not come with elaborate authentication and security features. If you must access Cozo remotely, you are responsible for setting up firewalls, encryptions and proxies yourself.</p>
+<p>As a guard against users carelessly binding Cozo to any address other than <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and potentially exposing content to everyone on the Internet, in this case, Cozo will refuse to start unless you also set up the environment variable <code class="docutils literal notranslate"><span class="pre">COZO_AUTH</span></code>. With the variable set, Cozo will then require all queries to provide the content of the set variable in the HTTP header field <code class="docutils literal notranslate"><span class="pre">x-cozo-auth</span></code> for verification. Please note that this “security measure” is not considered sufficient for any purpose and is only a last defence when every other security measure that you are responsible for setting up fails.</p>
+</section>
+<section id="ways-of-running-queries">
+<h2>Ways of running queries<a class="headerlink" href="#ways-of-running-queries" title="Permalink to this heading">#</a></h2>
+<section id="making-http-requests">
+<h3>Making HTTP requests<a class="headerlink" href="#making-http-requests" title="Permalink to this heading">#</a></h3>
+<p>As Cozo has a web-based API, it is accessible by all languages that are capable of making web requests. The structure of the API is also deliberately kept minimal so that no dedicated clients are necessary. The return values of requests are JSON when requests are successful, or text descriptions when errors occur, so a language only needs to be able to process JSON to use Cozo.</p>
+</section>
+<section id="jupyterlab">
+<h3>JupyterLab<a class="headerlink" href="#jupyterlab" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://jupyterlab.readthedocs.io/en/stable/">JupyterLab</a> is a web-based notebook interface in the python ecosystem heavily used by data scientists and is the recommended “IDE” of Cozo.</p>
+<p>First, install JupyterLab by following the install instructions of the project. Then install the pycozo library by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="s2">&quot;pycozo[pandas]&quot;</span>
+</pre></div>
+</div>
+<p>Now, open the JupyterLab web interface, start a Python 3 kernel, and in a cell run the following <a class="reference external" href="https://ipython.readthedocs.io/en/stable/interactive/magics.html">magic command</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">load_ext</span> <span class="n">pycozo</span><span class="o">.</span><span class="n">ipyext_direct</span>
+</pre></div>
+</div>
+<p>If you need to connect to Cozo using a non-default address or port, or you require an authentication string, you need to run the following magic commands as well:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">cozo_host</span> <span class="n">http</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">BIND_ADDRESS</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">PORT</span><span class="o">&gt;</span>
+<span class="o">%</span><span class="n">cozo_auth</span> <span class="o">&lt;</span><span class="n">YOUR_AUTH_STRING</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Now you can execute cells as you usually do in JupyterLab, and the content of the cells will be sent to Cozo and interpreted as CozoScript. Returned relations will be formatted as <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html">Pandas dataframe</a>.</p>
+<p>The above sets up the notebook in the Direct Cozo mode, where cells are default interpreted as CozoScript. You can still execute python code by starting the first line of a cell with the <code class="docutils literal notranslate"><span class="pre">%%py</span></code>. There is also an Indirect Cozo mode, started by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">load_ext</span> <span class="n">pycozo</span><span class="o">.</span><span class="n">ipyext</span>
+</pre></div>
+</div>
+<p>In this mode, only cells with the first line content <code class="docutils literal notranslate"><span class="pre">%%cozo</span></code> are interpreted as CozoScript. Other cells are interpreted in the normal way (by default, python code). Which mode you use depends on your workflow. We recommend the Indirect mode if you have lots of post-processing and visualizations.</p>
+<p>When a query is successfully executed, the result will be bound to the python variable <code class="docutils literal notranslate"><span class="pre">_</span></code> as a Pandas dataframe (this is a feature of Jupyter notebooks: the Cozo extension didn’t do anything extra).</p>
+<p>There are a few other useful magic commands:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">%cozo_run_file</span> <span class="pre">&lt;PATH_TO_FILE&gt;</span></code> runs a local file as CozoScript.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%cozo_run_string</span> <span class="pre">&lt;VARIABLE&gt;</span></code> runs variable containing string as CozoScript.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%cozo_set</span> <span class="pre">&lt;KEY&gt;</span> <span class="pre">&lt;VALUE&gt;</span></code> sets a parameter with the name <code class="docutils literal notranslate"><span class="pre">&lt;KEY&gt;</span></code> to the expression <code class="docutils literal notranslate"><span class="pre">&lt;VALUE&gt;</span></code>. The set parameters will be used by subsequent queries.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%cozo_set_params</span> <span class="pre">&lt;PARAM_MAP&gt;</span></code> replace all parameters by the given expression, which must evaluate to a dictionary with string keys.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%cozo_clear</span></code> clears all set parameters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%cozo_params</span></code> returns the parameters currently set.</p></li>
+</ul>
+</section>
+<section id="the-makeshift-javascript-console">
+<h3>The Makeshift JavaScript Console<a class="headerlink" href="#the-makeshift-javascript-console" title="Permalink to this heading">#</a></h3>
+<p>The Python and JupyterLab ecosystem is rather heavy-weight. If you are just testing out or running Cozo in an environment that only occasionally requires manual queries, you may be reluctant to install them. In this case, you may find the Makeshift JavaScript Console helpful.</p>
+<p>As Cozo is running an HTTP service, we assume that the browser on your local machine can reach its network. We recommend <a class="reference external" href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>, <a class="reference external" href="https://www.google.com/chrome/">Chrome</a>, or any Chromium-based browser for best display.</p>
+<p>If Cozo is running under the default configuration, navigate to <code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:9070</span></code>. You should be greeted with a mostly empty page telling you that Cozo is running. Now open the Developer Console (<a class="reference external" href="https://firefox-source-docs.mozilla.org/devtools-user/browser_console/index.html">Firefox console</a> or <a class="reference external" href="https://developer.chrome.com/docs/devtools/console/javascript/">Chrome console</a>) and switch to the “Console” tab. Now you can execute CozoScript by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">await</span> <span class="n">run</span><span class="p">(</span><span class="s2">&quot;&lt;COZOSCRIPT&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The returned tables will be properly formatted. If you need to pass in parameters, provide a second parameter with a JavaScript object. If you need to set an auth string, modify the global variable <code class="docutils literal notranslate"><span class="pre">COZO_AUTH</span></code>.</p>
+<p>The JavaScript Console is not as nice to use as Jupyter notebooks, but we think that it provides a much better experience than hand-rolled CLI consoles, since you can use JavaScript to manipulate the results.</p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="queries.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Queries</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="intro.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Introduction</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Ziyang Hu
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Getting started</a><ul>
+<li><a class="reference internal" href="#running-cozo">Running Cozo</a></li>
+<li><a class="reference internal" href="#the-query-api">The query API</a></li>
+<li><a class="reference internal" href="#security">Security</a></li>
+<li><a class="reference internal" href="#ways-of-running-queries">Ways of running queries</a><ul>
+<li><a class="reference internal" href="#making-http-requests">Making HTTP requests</a></li>
+<li><a class="reference internal" href="#jupyterlab">JupyterLab</a></li>
+<li><a class="reference internal" href="#the-makeshift-javascript-console">The Makeshift JavaScript Console</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>
