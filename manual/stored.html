@@ -209,7 +209,7 @@ The returned relation is that of the last query.</p>
 <p>Multiple queries passed in one go are executed in a single transaction. Within the transaction,
 execution of queries adheres to multi-version concurrency control: only data that are already committed,
 or written within the same transaction, are read,
-and at the end of the transaction any changes to stored relations are only committed if there are no conflicts
+and at the end of the transaction, any changes to stored relations are only committed if there are no conflicts
 and no errors are raised.</p>
 <section id="using-stored-relations">
 <h2>Using stored relations<a class="headerlink" href="#using-stored-relations" title="Permalink to this heading">#</a></h2>
@@ -217,8 +217,8 @@ and no errors are raised.</p>
 <section id="chaining-queries-into-a-single-transaction">
 <h2>Chaining queries into a single transaction<a class="headerlink" href="#chaining-queries-into-a-single-transaction" title="Permalink to this heading">#</a></h2>
 </section>
-<section id="using-transaction-to-make-indices">
-<h2>Using transaction to make indices<a class="headerlink" href="#using-transaction-to-make-indices" title="Permalink to this heading">#</a></h2>
+<section id="using-transactions-to-make-indices">
+<h2>Using transactions to make indices<a class="headerlink" href="#using-transactions-to-make-indices" title="Permalink to this heading">#</a></h2>
 </section>
 </section>
 
@@ -282,7 +282,7 @@ and no errors are raised.</p>
 <li><a class="reference internal" href="#">Stored relations and transactions</a><ul>
 <li><a class="reference internal" href="#using-stored-relations">Using stored relations</a></li>
 <li><a class="reference internal" href="#chaining-queries-into-a-single-transaction">Chaining queries into a single transaction</a></li>
-<li><a class="reference internal" href="#using-transaction-to-make-indices">Using transaction to make indices</a></li>
+<li><a class="reference internal" href="#using-transactions-to-make-indices">Using transactions to make indices</a></li>
 </ul>
 </li>
 </ul>

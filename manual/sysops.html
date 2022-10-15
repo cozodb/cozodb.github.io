@@ -202,12 +202,19 @@
         <article role="main">
           <section id="system-ops">
 <h1>System ops<a class="headerlink" href="#system-ops" title="Permalink to this heading">#</a></h1>
+<p>System ops start with a double-colon <code class="docutils literal notranslate"><span class="pre">::</span></code> and must appear alone in a script.
+In the following, we explain what each system op does, and the arguments they expect.</p>
 <section id="explain">
 <h2>Explain<a class="headerlink" href="#explain" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">::explain</span> <span class="pre">{</span> <span class="pre">&lt;query&gt;</span> <span class="pre">}</span></span></dt>
-<dd></dd></dl>
+<dd><p>A single query is enclosed in curly braces. Query options are allowed but ignored.
+The query is not executed, but its query plan is returned instead.
+Currently, there is no specification for the return format,
+but if you are familiar with the semi-naïve evaluation of stratified Datalog programs
+subject to magic-set rewrites, the returned data is pretty self-explanatory.</p>
+</dd></dl>
 
 </section>
 <section id="ops-on-stored-relations">
@@ -215,32 +222,38 @@
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">::relations</span></span></dt>
-<dd></dd></dl>
+<dd><p>List all stored relations currently in the database</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">columns</span> <span class="pre">&lt;rel_name&gt;</span></span></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">columns</span> <span class="pre">&lt;REL_NAME&gt;</span></span></dt>
+<dd><p>List all columns for the stored relation <code class="docutils literal notranslate"><span class="pre">&lt;REL_NAME&gt;</span></code>.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">remove</span> <span class="pre">&lt;rel_name&gt;</span> <span class="pre">(,</span> <span class="pre">&lt;rel_name&gt;)*</span></span></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">remove</span> <span class="pre">&lt;REL_NAME&gt;</span> <span class="pre">(,</span> <span class="pre">&lt;REL_NAME&gt;)*</span></span></dt>
+<dd><p>Remove stored relations. Several can be specified, joined by commas.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">rename</span> <span class="pre">&lt;old_name&gt;</span> <span class="pre">-&gt;</span> <span class="pre">&lt;new_name&gt;</span> <span class="pre">(,</span> <span class="pre">&lt;old_name&gt;</span> <span class="pre">-&gt;</span> <span class="pre">&lt;new_name&gt;)*</span></span></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">rename</span> <span class="pre">&lt;OLD_NAME&gt;</span> <span class="pre">-&gt;</span> <span class="pre">&lt;NEW_NAME&gt;</span> <span class="pre">(,</span> <span class="pre">&lt;OLD_NAME&gt;</span> <span class="pre">-&gt;</span> <span class="pre">&lt;NEW_NAME&gt;)*</span></span></dt>
+<dd><p>Rename stored relation <code class="docutils literal notranslate"><span class="pre">&lt;OLD_NAME&gt;</span></code> into <code class="docutils literal notranslate"><span class="pre">&lt;NEW_NAME&gt;</span></code>. Several may be specified, joined by commas.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">set_triggers</span> <span class="pre">&lt;ident&gt;</span> <span class="pre">&lt;triggers&gt;</span></span></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">show_triggers</span> <span class="pre">&lt;REL_NAME&gt;</span></span></dt>
+<dd><p>Display triggers associated with the stored relation <code class="docutils literal notranslate"><span class="pre">&lt;REL_NAME&gt;</span></code>.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">show_triggers</span> <span class="pre">&lt;ident&gt;</span></span></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">set_triggers</span> <span class="pre">&lt;REL_NAME&gt;</span> <span class="pre">&lt;TRIGGERS&gt;</span></span></dt>
+<dd><p>Set triggers for the stored relation <code class="docutils literal notranslate"><span class="pre">&lt;REL_NAME&gt;</span></code>. This is explained in more detail in the transactions chapter.</p>
+</dd></dl>
 
 </section>
 <section id="monitor-and-kill">
@@ -248,12 +261,14 @@
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">::running</span></span></dt>
-<dd></dd></dl>
+<dd><p>Display currently running queries and their IDs.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::kill</span> <span class="pre">&lt;pid&gt;</span></span></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">::kill</span> <span class="pre">&lt;ID&gt;</span></span></dt>
+<dd><p>Kill a running query specified by <code class="docutils literal notranslate"><span class="pre">&lt;ID&gt;</span></code>. The ID may be obtained by <code class="docutils literal notranslate"><span class="pre">::running</span></code>.</p>
+</dd></dl>
 
 </section>
 <section id="maintenance">
@@ -261,7 +276,9 @@
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">::compact</span></span></dt>
-<dd></dd></dl>
+<dd><p>Run compaction on the database. Running this may make the database smaller on disk and faster for queries,
+but running the op itself may take some time in the background.</p>
+</dd></dl>
 
 </section>
 </section>
