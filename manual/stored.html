@@ -157,7 +157,6 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Stored relations and transactions</a></li>
@@ -202,8 +201,117 @@
         <article role="main">
           <section id="stored-relations-and-transactions">
 <h1>Stored relations and transactions<a class="headerlink" href="#stored-relations-and-transactions" title="Permalink to this heading">#</a></h1>
-<p>The first thing to know before we get into the topic is that you can execute multiple queries in one go,
-by wrapping each query in curly braces <code class="docutils literal notranslate"><span class="pre">{}</span></code>. Each query can have its own independent query options.
+<p>Persistent databases store data on disk. As Cozo is a relational database,
+data are stored in <em>stored relations</em> on disk, which is analogous to tables in SQL databases.</p>
+<section id="using-stored-relations">
+<h2>Using stored relations<a class="headerlink" href="#using-stored-relations" title="Permalink to this heading">#</a></h2>
+<p>We already know how to query stored relations:
+use the <code class="docutils literal notranslate"><span class="pre">:relation[...]</span></code> or <code class="docutils literal notranslate"><span class="pre">:relation{...}</span></code> atoms in Horn-clause rules or algorithms.
+To manipulate stored relations, use one of the following query options:</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">:create</span> <span class="pre">&lt;NAME&gt;</span> <span class="pre">&lt;SPEC&gt;</span></span></dt>
+<dd><p>Creates a stored relation with the given name and the given spec.
+The named stored relation must not exist before.
+If a query is specified, data from the resulting relation is put into the created stored relation.
+This is the only stored relation-related query option in which a query may be omitted.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">:replace</span> <span class="pre">&lt;NAME&gt;</span> <span class="pre">&lt;SPEC&gt;</span></span></dt>
+<dd><p>This is similar to <code class="docutils literal notranslate"><span class="pre">:create</span></code>, except that if the named stored relation exists beforehand,
+it is completely replaced. The schema of the replaced relation need not match the new one.
+You cannot omit the query for <code class="docutils literal notranslate"><span class="pre">:replace</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">:put</span> <span class="pre">&lt;NAME&gt;</span> <span class="pre">&lt;SPEC&gt;</span></span></dt>
+<dd><p>Put data from the resulting relation into the named stored relation.
+If keys from the data exist beforehand, the rows are simply replaced with new ones.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">:rm</span> <span class="pre">&lt;NAME&gt;</span> <span class="pre">&lt;SPEC&gt;</span></span></dt>
+<dd><p>Remove data from the resulting relation from the named stored relation.
+Only keys are used.
+If a row from the resulting relation does not match any keys, nothing happens for that row,
+and no error is raised.</p>
+</dd></dl>
+
+<p>You can rename and remove stored relations with the system ops <code class="docutils literal notranslate"><span class="pre">::relation</span> <span class="pre">rename</span></code> and <code class="docutils literal notranslate"><span class="pre">::relation</span> <span class="pre">remove</span></code>,
+described in the system op chapter.</p>
+<section id="create-and-replace">
+<h3>Create and replace<a class="headerlink" href="#create-and-replace" title="Permalink to this heading">#</a></h3>
+<p>The format of <code class="docutils literal notranslate"><span class="pre">&lt;SPEC&gt;</span></code> is identical for all four ops, whereas the semantics is a bit different.</p>
+<p>We first describe the format and semantics for <code class="docutils literal notranslate"><span class="pre">:create</span></code> and <code class="docutils literal notranslate"><span class="pre">:replace</span></code>.
+A spec is a specification for columns, enclosed in curly braces <code class="docutils literal notranslate"><span class="pre">{}</span></code> and separated by commas:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[address, company_name, department_name, head_count] &lt;- $input_data
+
+:create dept_info {
+    company_name: String,
+    department_name: String,
+    =&gt;
+    head_count: Int,
+    address: String,
+}
+</pre></div>
+</div>
+<p>Columns before the symbol <code class="docutils literal notranslate"><span class="pre">=&gt;</span></code> form the <em>keys</em> (actually, a composite key) for the stored relation,
+and those after it form the <em>values</em>.
+If all columns are keys, the symbol <code class="docutils literal notranslate"><span class="pre">=&gt;</span></code> may be omitted altogether.
+The order of columns matters in the specification,
+especially for keys, as data is stored in lexicographically sorted order in trees,
+which has implications for data access in queries.
+Each key corresponds to a single value.</p>
+<p>In the above example, we explicitly specified the types for all columns.
+Type specification is described in its own chapter.
+If the types of the rows do not match the specified types,
+the system will first try to coerce the values, and if that fails, the query is aborted.
+You can selectively omit types for columns, and columns with types omitted will have the type <code class="docutils literal notranslate"><span class="pre">Any?</span></code>,
+which is valid for any value.
+As an example, if you do not care about type validation, the above query can be written as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[address, company_name, department_name, head_count] &lt;- $input_data
+
+:create dept_info { company_name, department_name =&gt; head_count, address }
+</pre></div>
+</div>
+<p>In the example, the bindings for the output match the columns exactly (though not in the same order).
+You can also explicitly specify the correspondence:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[a, b, count(c)] &lt;- $input_data
+
+:create dept_info { company_name = a, department_name = b, =&gt; head_count = count(c), address = b }
+</pre></div>
+</div>
+<p>You <em>must</em> use explicit correspondence if the entry head contains aggregation.</p>
+<p>Instead of specifying bindings, you can specify an expression to generate values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[a, b] &lt;- $input_data
+
+:create dept_info { company_name = a, department_name = b, =&gt; head_count default 0, address default &#39;&#39; }
+</pre></div>
+</div>
+<p>The expression is evaluated once for each row, so for example if you specified one of the UUID-generating functions,
+you will get a different UUID for each row.</p>
+</section>
+<section id="put-and-remove">
+<h3>Put and remove<a class="headerlink" href="#put-and-remove" title="Permalink to this heading">#</a></h3>
+<p>For <code class="docutils literal notranslate"><span class="pre">:put</span></code> and <code class="docutils literal notranslate"><span class="pre">:remove</span></code>,
+you do not need to specify all existing columns in the spec if the omitted columns have a default generator,
+in which case the generator will be used to generate a value,
+or the type of the column is nullable, in which case the value is <code class="docutils literal notranslate"><span class="pre">null</span></code>.
+Also, the order of the columns does not matter, and neither does whether a column occurs in the key or value position.
+The spec specified when the relation was created will be consulted to know how to store data correctly.
+Specifying default values does not have any effect and will not replace existing ones.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">:put</span></code>, the spec needs to contain enough bindings to generate all keys and values.
+For <code class="docutils literal notranslate"><span class="pre">:rm</span></code>, it only needs to generate all keys.</p>
+</section>
+</section>
+<section id="chaining-queries-into-a-single-transaction">
+<h2>Chaining queries into a single transaction<a class="headerlink" href="#chaining-queries-into-a-single-transaction" title="Permalink to this heading">#</a></h2>
+<p>You can execute multiple queries in one go,
+by wrapping each query in curly braces <code class="docutils literal notranslate"><span class="pre">{}</span></code>. Each query can have its independent query options.
 Execution proceeds for each query serially, and aborts at the first error encountered.
 The returned relation is that of the last query.</p>
 <p>Multiple queries passed in one go are executed in a single transaction. Within the transaction,
@@ -211,14 +319,9 @@ execution of queries adheres to multi-version concurrency control: only data tha
 or written within the same transaction, are read,
 and at the end of the transaction, any changes to stored relations are only committed if there are no conflicts
 and no errors are raised.</p>
-<section id="using-stored-relations">
-<h2>Using stored relations<a class="headerlink" href="#using-stored-relations" title="Permalink to this heading">#</a></h2>
 </section>
-<section id="chaining-queries-into-a-single-transaction">
-<h2>Chaining queries into a single transaction<a class="headerlink" href="#chaining-queries-into-a-single-transaction" title="Permalink to this heading">#</a></h2>
-</section>
-<section id="using-transactions-to-make-indices">
-<h2>Using transactions to make indices<a class="headerlink" href="#using-transactions-to-make-indices" title="Permalink to this heading">#</a></h2>
+<section id="triggers-and-ad-hoc-indices">
+<h2>Triggers and ad-hoc indices<a class="headerlink" href="#triggers-and-ad-hoc-indices" title="Permalink to this heading">#</a></h2>
 </section>
 </section>
 
@@ -280,9 +383,13 @@ and no errors are raised.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Stored relations and transactions</a><ul>
-<li><a class="reference internal" href="#using-stored-relations">Using stored relations</a></li>
+<li><a class="reference internal" href="#using-stored-relations">Using stored relations</a><ul>
+<li><a class="reference internal" href="#create-and-replace">Create and replace</a></li>
+<li><a class="reference internal" href="#put-and-remove">Put and remove</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#chaining-queries-into-a-single-transaction">Chaining queries into a single transaction</a></li>
-<li><a class="reference internal" href="#using-transactions-to-make-indices">Using transactions to make indices</a></li>
+<li><a class="reference internal" href="#triggers-and-ad-hoc-indices">Triggers and ad-hoc indices</a></li>
 </ul>
 </li>
 </ul>

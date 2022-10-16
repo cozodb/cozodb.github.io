@@ -157,7 +157,6 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
@@ -224,7 +223,7 @@
 <li><p>Lists are ordered lexicographically by their elements;</p></li>
 <li><p>Bytes are compared lexicographically;</p></li>
 <li><p>Strings are ordered lexicographically by their UTF-8 byte representations.</p></li>
-<li><p>UUIDs are sorted in a way that UUIDv1 with similar timestamps are near each other. This is to improve data locality and should be considered an implementation detail. Depending on the order of UUID in your application is nor recommended.</p></li>
+<li><p>UUIDs are sorted in a way that UUIDv1 with similar timestamps are near each other. This is to improve data locality and should be considered an implementation detail. Depending on the order of UUID in your application is not recommended.</p></li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -235,28 +234,54 @@
 </section>
 <section id="value-literals">
 <h2>Value literals<a class="headerlink" href="#value-literals" title="Permalink to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">null</span></code> for the type <code class="docutils literal notranslate"><span class="pre">Null</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code> and <code class="docutils literal notranslate"><span class="pre">true</span></code> for the type <code class="docutils literal notranslate"><span class="pre">Bool</span></code> are standard.</p>
-<p>Numbers …</p>
-<p>Strings …</p>
-<p>There is no literal representation for <code class="docutils literal notranslate"><span class="pre">Bytes</span></code> due to restrictions placed by JSON. But …</p>
-<p>Lists …</p>
+<p>The standard notations <code class="docutils literal notranslate"><span class="pre">null</span></code> for the type <code class="docutils literal notranslate"><span class="pre">Null</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code> and <code class="docutils literal notranslate"><span class="pre">true</span></code> for the type <code class="docutils literal notranslate"><span class="pre">Bool</span></code> are followed.</p>
+<p>Besides the usual decimal notation for signed integers,
+you can prefix a number with <code class="docutils literal notranslate"><span class="pre">0x</span></code> or <code class="docutils literal notranslate"><span class="pre">-0x</span></code> for hexadecimal notation,
+with <code class="docutils literal notranslate"><span class="pre">0o</span></code> or <code class="docutils literal notranslate"><span class="pre">-0o</span></code> for octal notation,
+or with <code class="docutils literal notranslate"><span class="pre">0b</span></code> or <code class="docutils literal notranslate"><span class="pre">-0b</span></code> for binary notation.
+Floating point numbers include the decimal dot, which may be trailing,
+and may be in scientific notation.
+All numbers may include underscores <code class="docutils literal notranslate"><span class="pre">_</span></code> in their representation for clarity.
+For example, <code class="docutils literal notranslate"><span class="pre">299_792_458</span></code> is the speed of light in meters per second.</p>
+<p>Strings can be typed in the same way as they do in JSON between double quotes <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>,
+with the same escape rules.
+You can also use single quotes <code class="docutils literal notranslate"><span class="pre">''</span></code> in which case the roles of the double quote and single quote are switched.
+In addition, there is a raw string notation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">r___</span><span class="s2">&quot;I&#39;m a raw string with &quot;</span><span class="n">quotes</span><span class="s2">&quot;!&quot;</span><span class="n">___</span>
+</pre></div>
+</div>
+<p>A raw string starts with the letter <code class="docutils literal notranslate"><span class="pre">r</span></code> followed by an arbitrary number of underscores, and then a double quote.
+It terminates when followed by a double quote and the same number of underscores.
+Everything in between is interpreted exactly as typed, including any newlines.</p>
+<p>There is no literal representation for <code class="docutils literal notranslate"><span class="pre">Bytes</span></code> or <code class="docutils literal notranslate"><span class="pre">Uuid</span></code> due to restrictions placed by JSON.
+You must pass in its Base64 encoding for bytes, or hyphened strings for UUIDs,
+and use the appropriate functions to decode it.
+If you are just inserting data into a stored relation with a column specified to contain bytes or UUIDs,
+auto-coercion will kick in.</p>
+<p>Lists are items enclosed between square brackets <code class="docutils literal notranslate"><span class="pre">[]</span></code>, separated by commas.
+A trailing comma is allowed after the last item.</p>
 </section>
-<section id="schema-types">
-<h2>Schema types<a class="headerlink" href="#schema-types" title="Permalink to this heading">#</a></h2>
-<p>In schema definition, the required type for a value can be specified by any of the following <em>schema-types</em></p>
+<section id="schema-types-for-stored-relations">
+<h2>Schema types for stored relations<a class="headerlink" href="#schema-types-for-stored-relations" title="Permalink to this heading">#</a></h2>
+<p>The following <em>atomic types</em> can be specified for columns in stored relations:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Ref</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Int</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Float</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Bool</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">String</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Bytes</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">List</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Uuid</span></code></p></li>
 </ul>
-<p>When retrieving triples’ values, the schema-type <code class="docutils literal notranslate"><span class="pre">Ref</span></code>, is represented by the type <code class="docutils literal notranslate"><span class="pre">Uuid</span></code>. The entity (the subject of the triple) is always a <code class="docutils literal notranslate"><span class="pre">Ref</span></code>, always represented by a <code class="docutils literal notranslate"><span class="pre">Uuid</span></code>.</p>
-<p>Note the absence of the <code class="docutils literal notranslate"><span class="pre">Null</span></code> type in schema-types.</p>
-<p>When asserting (inserting or updating) triples, if a value given is not of the correct schema-type, Cozo will first try to coerce the value and will only error out if no known coercion methods exist.</p>
+<p>There is no <code class="docutils literal notranslate"><span class="pre">Null</span></code> type. Instead, if you put a question mark after a type, it is treated as <em>nullable</em>,
+meaning that it either takes value in the type or is null.</p>
+<p>Two composite types are available. A <em>homogeneous list</em> is specified by square brackets,
+with the inner type in between, like this: <code class="docutils literal notranslate"><span class="pre">[Int]</span></code>.
+You may optionally specify how many elements are expected, like this: <code class="docutils literal notranslate"><span class="pre">[Int;</span> <span class="pre">10]</span></code>.
+A <em>heterogeneous list</em>, or a <em>tuple</em>, is specified by round brackets, with the element types listed by position,
+like this: <code class="docutils literal notranslate"><span class="pre">(Int,</span> <span class="pre">Float,</span> <span class="pre">String)</span></code>. Tuples always have fixed lengths.</p>
+<p>A special type <code class="docutils literal notranslate"><span class="pre">Any</span></code> can be specified, allowing all values except null.
+If you want to allow null as well, use <code class="docutils literal notranslate"><span class="pre">Any?</span></code>.
+Composite types may contain other composite types or <code class="docutils literal notranslate"><span class="pre">Any</span></code> types as their inner types.</p>
 </section>
 </section>
 
@@ -320,7 +345,7 @@
 <li><a class="reference internal" href="#">Datatypes</a><ul>
 <li><a class="reference internal" href="#value-types">Value types</a></li>
 <li><a class="reference internal" href="#value-literals">Value literals</a></li>
-<li><a class="reference internal" href="#schema-types">Schema types</a></li>
+<li><a class="reference internal" href="#schema-types-for-stored-relations">Schema types for stored relations</a></li>
 </ul>
 </li>
 </ul>

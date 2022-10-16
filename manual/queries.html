@@ -157,7 +157,6 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Getting started</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
@@ -216,29 +215,12 @@ and a rule body, which specifies the content of the relation, or how the content
 <p>In CozoScript, relations (stored relations or relations defined by rules) abide by the <em>set semantics</em>,
 meaning that even if a rule may compute a row multiple times, it will occur only once in the output.
 This is in contradistinction to SQL.</p>
-<p>There are three types of named rules in CozoScript: constant rules, Horn-clause rules and algorithm applications.</p>
-<section id="constant-rules">
-<h2>Constant rules<a class="headerlink" href="#constant-rules" title="Permalink to this heading">#</a></h2>
-<p>The following is an example of a constant rule:</p>
+<p>There are two types of named rules in CozoScript: Horn-clause rules and algorithm applications.
+You may think that there is a third type: constant rule, written as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const_rule</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]]</span>
 </pre></div>
 </div>
-<p>Constant rules are distinguished by the symbol <code class="docutils literal notranslate"><span class="pre">&lt;-</span></code> separating the rule head and rule body.
-The rule body should be an expression evaluating to a list of lists:
-every subslist of the rule body should be of the same length (the <em>arity</em> of the rule),
-and must match the number of arguments in the rule head.
-In general, if you are passing data into the query,
-you should take advantage of named parameters:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>const_rule[a, b, c] &lt;- $data_passed_in
-</pre></div>
-</div>
-<p>and pass a map containing a key of <code class="docutils literal notranslate"><span class="pre">&quot;data_passed_in&quot;</span></code> with a value of a list of lists.</p>
-<p>The rule head may be omitted if the rule body is not the empty list:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const_rule</span><span class="p">[]</span> <span class="o">&lt;-</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]]</span>
-</pre></div>
-</div>
-<p>in which case the system will deduce the arity of the rule from the data.</p>
-</section>
+<p>but this is actually syntax sugar for the algorithm application of the <code class="docutils literal notranslate"><span class="pre">Constant</span></code> algorithm.</p>
 <section id="horn-clause-rules">
 <h2>Horn-clause rules<a class="headerlink" href="#horn-clause-rules" title="Permalink to this heading">#</a></h2>
 <p>An example of a Horn-clause rule is:</p>
@@ -485,9 +467,9 @@ If possible, execution will stop as soon as this number of output rows is collec
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">:sort</span> <span class="pre">SORT_ARG</span> <span class="pre">(,</span> <span class="pre">SORT_ARG)*</span></span></dt>
+<span class="sig-name descname"><span class="pre">:sort</span> <span class="pre">&lt;SORT_ARG&gt;</span> <span class="pre">(,</span> <span class="pre">&lt;SORT_ARG&gt;)*</span></span></dt>
 <dd><p>Sort the output relation before applying other options or returning.
-Specify <code class="docutils literal notranslate"><span class="pre">SORT_ARG</span></code> as they appear in the rule head of the entry, separated by commas.
+Specify <code class="docutils literal notranslate"><span class="pre">&lt;SORT_ARG&gt;</span></code> as they appear in the rule head of the entry, separated by commas.
 You can optionally specify the sort direction of each argument by prefixing them with <code class="docutils literal notranslate"><span class="pre">+</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code>,
 with minus denoting descending sort. As an example, <code class="docutils literal notranslate"><span class="pre">:sort</span> <span class="pre">-count(employee),</span> <span class="pre">dept_name</span></code>
 sorts by employee count descendingly first, then break ties with department name in ascending alphabetical order.
@@ -572,7 +554,6 @@ Essential for transactions and triggers.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Queries</a><ul>
-<li><a class="reference internal" href="#constant-rules">Constant rules</a></li>
 <li><a class="reference internal" href="#horn-clause-rules">Horn-clause rules</a><ul>
 <li><a class="reference internal" href="#atoms">Atoms</a></li>
 <li><a class="reference internal" href="#head-and-returned-relation">Head and returned relation</a></li>
