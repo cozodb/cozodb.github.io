@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Execution of queries" href="execution.html" /><link rel="prev" title="Queries" href="queries.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Query execution" href="execution.html" /><link rel="prev" title="Queries" href="queries.html" />
         <link rel="canonical" href="/manual/stored.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
@@ -160,7 +160,7 @@
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Stored relations and transactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="execution.html">Execution of queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
@@ -203,10 +203,10 @@
 <h1>Stored relations and transactions<a class="headerlink" href="#stored-relations-and-transactions" title="Permalink to this heading">#</a></h1>
 <p>Persistent databases store data on disk. As Cozo is a relational database,
 data are stored in <em>stored relations</em> on disk, which is analogous to tables in SQL databases.</p>
-<section id="using-stored-relations">
-<h2>Using stored relations<a class="headerlink" href="#using-stored-relations" title="Permalink to this heading">#</a></h2>
+<section id="stored-relations">
+<h2>Stored relations<a class="headerlink" href="#stored-relations" title="Permalink to this heading">#</a></h2>
 <p>We already know how to query stored relations:
-use the <code class="docutils literal notranslate"><span class="pre">:relation[...]</span></code> or <code class="docutils literal notranslate"><span class="pre">:relation{...}</span></code> atoms in Horn-clause rules or algorithms.
+use the <code class="docutils literal notranslate"><span class="pre">:relation[...]</span></code> or <code class="docutils literal notranslate"><span class="pre">:relation{...}</span></code> atoms in inline or fixed rules.
 To manipulate stored relations, use one of the following query options:</p>
 <dl class="py function">
 <dt class="sig sig-object py">
@@ -234,11 +234,27 @@ If keys from the data exist beforehand, the rows are simply replaced with new on
 
 <dl class="py function">
 <dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">:ensure</span> <span class="pre">&lt;NAME&gt;</span> <span class="pre">&lt;SPEC&gt;</span></span></dt>
+<dd><p>Ensures that rows specified by the output relation and spec already exist in the database
+and that no other process has written to these rows at commit since the transaction starts.
+Useful for ensuring read-write consistency.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">:rm</span> <span class="pre">&lt;NAME&gt;</span> <span class="pre">&lt;SPEC&gt;</span></span></dt>
 <dd><p>Remove data from the resulting relation from the named stored relation.
 Only keys are used.
 If a row from the resulting relation does not match any keys, nothing happens for that row,
 and no error is raised.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">:ensure_not</span> <span class="pre">&lt;NAME&gt;</span> <span class="pre">&lt;SPEC&gt;</span></span></dt>
+<dd><p>Ensures that rows specified by the output relation and spec do not exist in the database
+and that no other process has written to these rows at commit since the transaction starts.
+Useful for ensuring read-write consistency.</p>
 </dd></dl>
 
 <p>You can rename and remove stored relations with the system ops <code class="docutils literal notranslate"><span class="pre">::relation</span> <span class="pre">rename</span></code> and <code class="docutils literal notranslate"><span class="pre">::relation</span> <span class="pre">remove</span></code>,
@@ -295,33 +311,78 @@ You can also explicitly specify the correspondence:</p>
 <p>The expression is evaluated once for each row, so for example if you specified one of the UUID-generating functions,
 you will get a different UUID for each row.</p>
 </section>
-<section id="put-and-remove">
-<h3>Put and remove<a class="headerlink" href="#put-and-remove" title="Permalink to this heading">#</a></h3>
-<p>For <code class="docutils literal notranslate"><span class="pre">:put</span></code> and <code class="docutils literal notranslate"><span class="pre">:remove</span></code>,
+<section id="put-remove-ensure-and-ensure-not">
+<h3>Put, remove, ensure and ensure-not<a class="headerlink" href="#put-remove-ensure-and-ensure-not" title="Permalink to this heading">#</a></h3>
+<p>For <code class="docutils literal notranslate"><span class="pre">:put</span></code>, <code class="docutils literal notranslate"><span class="pre">:remove</span></code>, <code class="docutils literal notranslate"><span class="pre">:ensure</span></code> and <code class="docutils literal notranslate"><span class="pre">:ensure_not</span></code>,
 you do not need to specify all existing columns in the spec if the omitted columns have a default generator,
 in which case the generator will be used to generate a value,
 or the type of the column is nullable, in which case the value is <code class="docutils literal notranslate"><span class="pre">null</span></code>.
 Also, the order of the columns does not matter, and neither does whether a column occurs in the key or value position.
 The spec specified when the relation was created will be consulted to know how to store data correctly.
 Specifying default values does not have any effect and will not replace existing ones.</p>
-<p>For <code class="docutils literal notranslate"><span class="pre">:put</span></code>, the spec needs to contain enough bindings to generate all keys and values.
-For <code class="docutils literal notranslate"><span class="pre">:rm</span></code>, it only needs to generate all keys.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">:put</span></code> and <code class="docutils literal notranslate"><span class="pre">:ensure</span></code>, the spec needs to contain enough bindings to generate all keys and values.
+For <code class="docutils literal notranslate"><span class="pre">:rm</span></code> and <code class="docutils literal notranslate"><span class="pre">:ensure_not</span></code>, it only needs to generate all keys.</p>
 </section>
 </section>
-<section id="chaining-queries-into-a-single-transaction">
-<h2>Chaining queries into a single transaction<a class="headerlink" href="#chaining-queries-into-a-single-transaction" title="Permalink to this heading">#</a></h2>
-<p>You can execute multiple queries in one go,
-by wrapping each query in curly braces <code class="docutils literal notranslate"><span class="pre">{}</span></code>. Each query can have its independent query options.
+<section id="chaining-queries">
+<h2>Chaining queries<a class="headerlink" href="#chaining-queries" title="Permalink to this heading">#</a></h2>
+<p>Each script you send to Cozo is executed in its own transaction.
+To ensure consistency of multiple operations on data,
+You can define multiple queries in a single script,
+by wrapping each query in curly braces <code class="docutils literal notranslate"><span class="pre">{}</span></code>.
+Each query can have its independent query options.
 Execution proceeds for each query serially, and aborts at the first error encountered.
-The returned relation is that of the last query.</p>
-<p>Multiple queries passed in one go are executed in a single transaction. Within the transaction,
+The returned relation is that of the last query.
+Within a transaction,
 execution of queries adheres to multi-version concurrency control: only data that are already committed,
 or written within the same transaction, are read,
 and at the end of the transaction, any changes to stored relations are only committed if there are no conflicts
 and no errors are raised.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">:assert</span></code>, <code class="docutils literal notranslate"><span class="pre">:ensure</span></code> and <code class="docutils literal notranslate"><span class="pre">:ensure_not</span></code> query options allow you to express complicated constraints
+that must be satisfied for your transaction to commit.</p>
 </section>
-<section id="triggers-and-ad-hoc-indices">
-<h2>Triggers and ad-hoc indices<a class="headerlink" href="#triggers-and-ad-hoc-indices" title="Permalink to this heading">#</a></h2>
+<section id="triggers">
+<h2>Triggers<a class="headerlink" href="#triggers" title="Permalink to this heading">#</a></h2>
+<p>Cozo does not have traditional indices on stored relations.
+You must define your indices as separate stored relations yourself,
+for example by having a relation containing identical data but in different column order.
+More complicated and exotic “indices” are also possible and used in practice.
+At query time, you explicitly query the index instead of the original stored relation.</p>
+<p>You synchronize your indices and the original by ensuring that any mutations you do on the database
+write the correct data to the “canonical” relation and its indices in the same transaction.
+As doing this by hand for every mutation in your business logic leads to lots of repetitions,
+is error-prone and a maintenance nightmare,
+Cozo also supports <em>triggers</em> to do it automatically for you.</p>
+<p>You attach triggers to a stored relation by running the system op <code class="docutils literal notranslate"><span class="pre">::relation</span> <span class="pre">set_triggers</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">::</span><span class="n">relation</span> <span class="n">set_triggers</span> <span class="n">relation_name</span>
+
+<span class="n">on</span> <span class="n">put</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">QUERY</span><span class="o">&gt;</span> <span class="p">}</span>
+<span class="n">on</span> <span class="n">put</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">QUERY</span><span class="o">&gt;</span> <span class="p">}</span> <span class="c1"># you can specify as many triggers as you need</span>
+<span class="n">on</span> <span class="n">rm</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">QUERY</span><span class="o">&gt;</span> <span class="p">}</span>
+<span class="n">on</span> <span class="n">replace</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">QUERY</span><span class="o">&gt;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>You can have anything valid query for <code class="docutils literal notranslate"><span class="pre">&lt;QUERY&gt;</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">on</span> <span class="pre">put</span></code> queries will run when any data is inserted into the relation,
+which can be triggered by <code class="docutils literal notranslate"><span class="pre">:put</span></code>, <code class="docutils literal notranslate"><span class="pre">:create</span></code> and <code class="docutils literal notranslate"><span class="pre">:replace</span></code> query options.
+The implicitly defined rules <code class="docutils literal notranslate"><span class="pre">_new[]</span></code> and <code class="docutils literal notranslate"><span class="pre">_old[]</span></code> can be used in the queries, and
+contain the added rows, and the replaced rows (if any).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">on</span> <span class="pre">rm</span></code> queries will run when deletion is triggered by the <code class="docutils literal notranslate"><span class="pre">:rm</span></code> query option.
+The implicitly defined rules <code class="docutils literal notranslate"><span class="pre">_new[]</span></code> and <code class="docutils literal notranslate"><span class="pre">_old[]</span></code> can be used in the queries,
+the first rule contains the keys of the rows for deletion, and the second rule contains the rows
+actually deleted, with both keys and non-keys.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">on</span> <span class="pre">replace</span></code> queries will run when <code class="docutils literal notranslate"><span class="pre">:replace</span></code> query options are run.
+They are run before any <code class="docutils literal notranslate"><span class="pre">on</span> <span class="pre">put</span></code> triggers are run for the same stored relation.</p>
+<p>All triggers for a relation must be specified together, in the same system op.
+In other words, <code class="docutils literal notranslate"><span class="pre">::relation</span> <span class="pre">set_triggers</span></code> simply replaces all the triggers associated with a stored relation.
+To remove all triggers from a stored relation, simply pass no queries for the system op.</p>
+<p>Besides indices, creative use of triggers abounds, but you must consider the maintenance burden they introduce.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not introduce loops in your triggers.
+A loop occurs when a relation has triggers which affect other relations,
+which in turn have other triggers that ultimately affect the starting relation.</p>
+</div>
 </section>
 </section>
 
@@ -335,7 +396,7 @@ and no errors are raised.</p>
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Execution of queries</div>
+                <div class="title">Query execution</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -383,13 +444,13 @@ and no errors are raised.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Stored relations and transactions</a><ul>
-<li><a class="reference internal" href="#using-stored-relations">Using stored relations</a><ul>
+<li><a class="reference internal" href="#stored-relations">Stored relations</a><ul>
 <li><a class="reference internal" href="#create-and-replace">Create and replace</a></li>
-<li><a class="reference internal" href="#put-and-remove">Put and remove</a></li>
+<li><a class="reference internal" href="#put-remove-ensure-and-ensure-not">Put, remove, ensure and ensure-not</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#chaining-queries-into-a-single-transaction">Chaining queries into a single transaction</a></li>
-<li><a class="reference internal" href="#triggers-and-ad-hoc-indices">Triggers and ad-hoc indices</a></li>
+<li><a class="reference internal" href="#chaining-queries">Chaining queries</a></li>
+<li><a class="reference internal" href="#triggers">Triggers</a></li>
 </ul>
 </li>
 </ul>

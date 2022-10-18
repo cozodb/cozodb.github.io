@@ -7,7 +7,7 @@
         <link rel="canonical" href="/manual/execution.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
-        <title>Execution of queries - Cozo Manual</title>
+        <title>Query execution - Cozo Manual</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -160,7 +160,7 @@
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Execution of queries</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
@@ -199,8 +199,15 @@
           </label>
         </div>
         <article role="main">
-          <section id="execution-of-queries">
-<h1>Execution of queries<a class="headerlink" href="#execution-of-queries" title="Permalink to this heading">#</a></h1>
+          <section id="query-execution">
+<h1>Query execution<a class="headerlink" href="#query-execution" title="Permalink to this heading">#</a></h1>
+<p>How queries are executed in a particular database
+is usually considered an implementation detail hidden behind an abstraction layer,
+which normal users should not care about.
+As everyone who has used databases knows, however,
+it is at best a leaky abstraction, since bad query execution plans entail
+unacceptable performance characteristics,
+and fighting, or “optimizing” the query optimizers is a difficult but necessary task.</p>
 </section>
 
         </article>

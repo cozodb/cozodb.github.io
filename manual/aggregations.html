@@ -160,7 +160,7 @@
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="execution.html">Execution of queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
@@ -208,9 +208,9 @@
 <div><dl class="simple">
 <dt>idempotency</dt><dd><p>the aggregate of a single value <code class="docutils literal notranslate"><span class="pre">a</span></code> is <code class="docutils literal notranslate"><span class="pre">a</span></code> itself,</p>
 </dd>
-<dt>commutivity</dt><dd><p>the aggregate of <code class="docutils literal notranslate"><span class="pre">a</span></code> then <code class="docutils literal notranslate"><span class="pre">b</span></code> is equal to the aggregate of <code class="docutils literal notranslate"><span class="pre">b</span></code> then <code class="docutils literal notranslate"><span class="pre">a</span></code>,</p>
+<dt>commutativity</dt><dd><p>the aggregate of <code class="docutils literal notranslate"><span class="pre">a</span></code> then <code class="docutils literal notranslate"><span class="pre">b</span></code> is equal to the aggregate of <code class="docutils literal notranslate"><span class="pre">b</span></code> then <code class="docutils literal notranslate"><span class="pre">a</span></code>,</p>
 </dd>
-<dt>commutivity</dt><dd><p>it is immaterial where we put the parentheses in an aggregate application.</p>
+<dt>associativity</dt><dd><p>it is immaterial where we put the parentheses in an aggregate application.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -338,6 +338,16 @@
 <dt class="sig sig-object py" id="Aggr.Ord.latest_by">
 <span class="sig-name descname"><span class="pre">latest_by</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Aggr.Ord.latest_by" title="Permalink to this definition">#</a></dt>
 <dd><p>The argument should be a list of two elements and this aggregation returns the <code class="docutils literal notranslate"><span class="pre">data</span></code> of the maximum <code class="docutils literal notranslate"><span class="pre">cost</span></code>. This is very similar to <code class="docutils literal notranslate"><span class="pre">min_cost</span></code>, the differences being that maximum instead of minimum is used, only the data itself is returned, and the aggregation is deliberately note a meet aggregation. Intended to be used in timestamped audit trails.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Aggr.Ord.choice_rand">
+<span class="sig-name descname"><span class="pre">choice_rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Aggr.Ord.choice_rand" title="Permalink to this definition">#</a></dt>
+<dd><p>Non-deterministically chooses one of the values of <code class="docutils literal notranslate"><span class="pre">var</span></code> as the aggregate.
+Each value the aggregation encounters has the same probability of being chosen.
+This version of <code class="docutils literal notranslate"><span class="pre">choice</span></code> is not a meet aggregation
+since it is impossible to satisfy the uniform sampling requirement while maintaining no state,
+which is an implementation restriction unlikely to be lifted.</p>
 </dd></dl>
 
 <section id="statistical-aggregations">
