@@ -160,9 +160,9 @@
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Utilities and algorithms</a></li>
@@ -343,6 +343,19 @@ but we think that it provides a much better experience than hand-rolled CLI cons
 since you can use JavaScript to manipulate the results.</p>
 </section>
 </section>
+<section id="building">
+<h2>Building<a class="headerlink" href="#building" title="Permalink to this heading">#</a></h2>
+<p>If for some reason the binary distribution does not work for you,
+you can build Cozo from source, which is straightforward.
+First, clone the Cozo git repo (you need to pass the <code class="docutils literal notranslate"><span class="pre">--recursive</span></code> flag so that submodules are also cloned),
+then you need to install the <a class="reference external" href="https://www.rust-lang.org/tools/install">Rust toolchain</a> for your system.
+You also need a C++17 compiler.
+After these preparations, run <code class="docutils literal notranslate"><span class="pre">cargo</span> <span class="pre">build</span> <span class="pre">--release</span></code> in the root of the cloned repo,
+wait for potentially a long time, and you will find the compiled binary in <code class="docutils literal notranslate"><span class="pre">target/release</span></code>
+if everything goes well. You can pass <code class="docutils literal notranslate"><span class="pre">-F</span> <span class="pre">jemalloc</span></code> to the <code class="docutils literal notranslate"><span class="pre">cargo</span> <span class="pre">build</span></code> command
+to indicate that you want to compile and use jemalloc as the memory allocator for the RocksDB storage backend,
+which, depending on your workload, can make a difference in performance.</p>
+</section>
 </section>
 
         </article>
@@ -414,6 +427,7 @@ since you can use JavaScript to manipulate the results.</p>
 <li><a class="reference internal" href="#the-makeshift-javascript-console">The Makeshift JavaScript Console</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#building">Building</a></li>
 </ul>
 </li>
 </ul>

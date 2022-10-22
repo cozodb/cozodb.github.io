@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Functions" href="functions.html" /><link rel="prev" title="System ops" href="sysops.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Query execution" href="execution.html" /><link rel="prev" title="System ops" href="sysops.html" />
         <link rel="canonical" href="/manual/datatypes.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
@@ -160,9 +160,9 @@
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Datatypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Utilities and algorithms</a></li>
@@ -261,8 +261,8 @@ auto-coercion will kick in.</p>
 <p>Lists are items enclosed between square brackets <code class="docutils literal notranslate"><span class="pre">[]</span></code>, separated by commas.
 A trailing comma is allowed after the last item.</p>
 </section>
-<section id="schema-types-for-stored-relations">
-<h2>Schema types for stored relations<a class="headerlink" href="#schema-types-for-stored-relations" title="Permalink to this heading">#</a></h2>
+<section id="column-types">
+<h2>Column types<a class="headerlink" href="#column-types" title="Permalink to this heading">#</a></h2>
 <p>The following <em>atomic types</em> can be specified for columns in stored relations:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Int</span></code></p></li>
@@ -290,12 +290,12 @@ Composite types may contain other composite types or <code class="docutils liter
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="functions.html">
+          <a class="next-page" href="execution.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Functions</div>
+                <div class="title">Query execution</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -345,7 +345,7 @@ Composite types may contain other composite types or <code class="docutils liter
 <li><a class="reference internal" href="#">Datatypes</a><ul>
 <li><a class="reference internal" href="#value-types">Value types</a></li>
 <li><a class="reference internal" href="#value-literals">Value literals</a></li>
-<li><a class="reference internal" href="#schema-types-for-stored-relations">Schema types for stored relations</a></li>
+<li><a class="reference internal" href="#column-types">Column types</a></li>
 </ul>
 </li>
 </ul>
