@@ -201,23 +201,31 @@
         <article role="main">
           <section id="getting-started">
 <h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this heading">#</a></h1>
+<p>Welcome to the Cozo Manual. The latest version of this manual can be read at <a class="reference external" href="https://cozodb.github.io/current/manual">https://cozodb.github.io/current/manual</a>.
+Alternatively, you can download a PDF version for offline viewing at <a class="reference external" href="https://cozodb.github.io/current/manual.pdf">https://cozodb.github.io/current/manual.pdf</a>.</p>
+<p>We aim to make sure that this manual at least touches upon all features currently implemented in Cozo,
+though the coverage of some topics may be sketchy at this stage.</p>
+<p>This manual assumes that you already know the basics of the Cozo database,
+at the level of the <a class="reference external" href="https://cozodb.github.io/current/tutorial.html">Tutorial</a>.</p>
+<section id="downloading-cozo">
+<h2>Downloading Cozo<a class="headerlink" href="#downloading-cozo" title="Permalink to this heading">#</a></h2>
 <p>Cozo is distributed as a single executable.
-To get started, download the executable for your platform and uncompress it.
-After decompression, you may also need to give it executable permission by <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">./cozo</span></code> on Unix-based systems.</p>
-<p>The pre-compiled distributions of Cozo support Linux, Mac and Windows.
-As the toolchain on Windows is very different from UNIX-based systems,
+Precompiled binaries can be downloaded from the <a class="reference external" href="https://github.com/cozodb/cozo/releases">release page</a> on the GitHub repo,
+which are currently available for Linux (Intel x64), Mac (Intel x64 and Apple ARM) and Windows (Intel x64).</p>
+<p>As the build process on Windows is internally very different from UNIX-based systems,
 the Windows build hasn’t received as much attention as the other builds,
 and may suffer from inferior performance and Windows-specific bugs.
 For Windows users,
 we recommend running Cozo under <a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL</a> if possible,
 especially if your workload is heavy.</p>
+</section>
 <section id="starting-cozo">
 <h2>Starting Cozo<a class="headerlink" href="#starting-cozo" title="Permalink to this heading">#</a></h2>
-<p>Run the <code class="docutils literal notranslate"><span class="pre">cozo</span></code> command in a terminal:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">cozo</span> <span class="n">PATH_TO_DATA_DIRECTORY</span>
+<p>Run the <code class="docutils literal notranslate"><span class="pre">cozoserver</span></code> command in a terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">cozoserver</span> <span class="o">&lt;</span><span class="n">PATH_TO_DATA_DIRECTORY</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>If <code class="docutils literal notranslate"><span class="pre">PATH_TO_DATA_DIRECTORY</span></code> does not exist, it will be created.
+<p>If <code class="docutils literal notranslate"><span class="pre">&lt;PATH_TO_DATA_DIRECTORY&gt;</span></code> does not exist, it will be created.
 Cozo will then start a web server and bind to address <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and port <code class="docutils literal notranslate"><span class="pre">9070</span></code>.
 These two can be customized: run the executable with the <code class="docutils literal notranslate"><span class="pre">-h</span></code> option to learn how.</p>
 <p>To stop Cozo, type <code class="docutils literal notranslate"><span class="pre">CTRL-C</span></code> in the terminal, or send <code class="docutils literal notranslate"><span class="pre">SIGTERM</span></code> to the process with e.g. <code class="docutils literal notranslate"><span class="pre">kill</span></code>.</p>
@@ -237,23 +245,29 @@ The structure of the expected JSON payload is:</p>
 For example, if you have <code class="docutils literal notranslate"><span class="pre">params</span></code> set up to be <code class="docutils literal notranslate"><span class="pre">{&quot;num&quot;:</span> <span class="pre">1}</span></code>,
 then <code class="docutils literal notranslate"><span class="pre">$num</span></code> can be used anywhere in your query string where an expression is expected.
 Always use <code class="docutils literal notranslate"><span class="pre">params</span></code> instead of constructing query strings yourself when you have parametrized queries.</p>
-<section id="security">
-<h3>Security<a class="headerlink" href="#security" title="Permalink to this heading">#</a></h3>
-<p>Cozo is currently designed to run in a trusted environment and be used by trusted clients,
+<p>As an example, the following runs a system op with the <code class="docutils literal notranslate"><span class="pre">curl</span></code> command line tool:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">X</span> <span class="n">POST</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">9070</span><span class="o">/</span><span class="n">text</span><span class="o">-</span><span class="n">query</span> \
+     <span class="o">-</span><span class="n">H</span> <span class="s1">&#39;content-type: application/json&#39;</span> \
+     <span class="o">-</span><span class="n">d</span> <span class="s1">&#39;{&quot;script&quot;: &quot;::running&quot;, &quot;params&quot;: </span><span class="si">{}</span><span class="s1">}&#39;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Cozo is designed to run in a trusted environment and be used by trusted clients,
 therefore it does not come with elaborate authentication and security features.
 If you must access Cozo remotely,
 you are responsible for setting up firewalls, encryptions and proxies yourself.</p>
 <p>As a guard against users carelessly binding Cozo to any address other than <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code>
 and potentially exposing content to everyone on the Internet,
 in this case,
-Cozo will refuse to start unless you also set up the environment variable <code class="docutils literal notranslate"><span class="pre">COZO_AUTH</span></code>.
-With the variable set,
-Cozo will then require all queries to provide the content of the set variable
-in the HTTP header field <code class="docutils literal notranslate"><span class="pre">x-cozo-auth</span></code> for verification.
-Please note that this “security measure” is not considered sufficient for any purpose
+Cozo will generate a token string and require all queries
+from non-loopback addresses to provide the token string
+in the HTTP header field <code class="docutils literal notranslate"><span class="pre">x-cozo-auth</span></code>.
+The warning printed when you start Cozo with a non-default binding will tell you how to find the token string.</p>
+<p>Please note that this “security measure” is not considered sufficient for any purpose
 and is only a last defence
 when every other security measure that you are responsible for setting up fails.</p>
-</section>
+</div>
 </section>
 <section id="running-queries">
 <h2>Running queries<a class="headerlink" href="#running-queries" title="Permalink to this heading">#</a></h2>
@@ -343,16 +357,25 @@ but we think that it provides a much better experience than hand-rolled CLI cons
 since you can use JavaScript to manipulate the results.</p>
 </section>
 </section>
-<section id="building">
-<h2>Building<a class="headerlink" href="#building" title="Permalink to this heading">#</a></h2>
+<section id="building-cozo-from-source">
+<h2>Building Cozo from source<a class="headerlink" href="#building-cozo-from-source" title="Permalink to this heading">#</a></h2>
 <p>If for some reason the binary distribution does not work for you,
-you can build Cozo from source, which is straightforward.
-First, clone the Cozo git repo (you need to pass the <code class="docutils literal notranslate"><span class="pre">--recursive</span></code> flag so that submodules are also cloned),
-then you need to install the <a class="reference external" href="https://www.rust-lang.org/tools/install">Rust toolchain</a> for your system.
-You also need a C++17 compiler.
-After these preparations, run <code class="docutils literal notranslate"><span class="pre">cargo</span> <span class="pre">build</span> <span class="pre">--release</span></code> in the root of the cloned repo,
+you can build Cozo from source, which is straightforward.</p>
+<p>First, clone the Cozo git repo:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">cozodb</span><span class="o">/</span><span class="n">cozo</span><span class="o">.</span><span class="n">git</span> <span class="o">--</span><span class="n">recursive</span>
+</pre></div>
+</div>
+<p>You need to pass the <code class="docutils literal notranslate"><span class="pre">--recursive</span></code> flag so that submodules are also cloned.
+Then you need to install the <a class="reference external" href="https://www.rust-lang.org/tools/install">Rust toolchain</a> for your system.
+You also need a C++17 compiler.</p>
+<p>After these preparations, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cargo</span> <span class="n">build</span> <span class="o">--</span><span class="n">release</span>
+</pre></div>
+</div>
+<p>in the root of the cloned repo,
 wait for potentially a long time, and you will find the compiled binary in <code class="docutils literal notranslate"><span class="pre">target/release</span></code>
-if everything goes well. You can pass <code class="docutils literal notranslate"><span class="pre">-F</span> <span class="pre">jemalloc</span></code> to the <code class="docutils literal notranslate"><span class="pre">cargo</span> <span class="pre">build</span></code> command
+if everything goes well.</p>
+<p>You can run <code class="docutils literal notranslate"><span class="pre">cargo</span> <span class="pre">build</span> <span class="pre">--release</span> <span class="pre">-F</span> <span class="pre">jemalloc</span></code> instead
 to indicate that you want to compile and use jemalloc as the memory allocator for the RocksDB storage backend,
 which, depending on your workload, can make a difference in performance.</p>
 </section>
@@ -416,18 +439,16 @@ which, depending on your workload, can make a difference in performance.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Getting started</a><ul>
+<li><a class="reference internal" href="#downloading-cozo">Downloading Cozo</a></li>
 <li><a class="reference internal" href="#starting-cozo">Starting Cozo</a></li>
-<li><a class="reference internal" href="#the-query-api">The query API</a><ul>
-<li><a class="reference internal" href="#security">Security</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#the-query-api">The query API</a></li>
 <li><a class="reference internal" href="#running-queries">Running queries</a><ul>
 <li><a class="reference internal" href="#making-http-requests">Making HTTP requests</a></li>
 <li><a class="reference internal" href="#jupyterlab">JupyterLab</a></li>
 <li><a class="reference internal" href="#the-makeshift-javascript-console">The Makeshift JavaScript Console</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#building">Building</a></li>
+<li><a class="reference internal" href="#building-cozo-from-source">Building Cozo from source</a></li>
 </ul>
 </li>
 </ul>
