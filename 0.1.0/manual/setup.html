@@ -379,6 +379,17 @@ if everything goes well.</p>
 to indicate that you want to compile and use jemalloc as the memory allocator for the RocksDB storage backend,
 which, depending on your workload, can make a difference in performance.</p>
 </section>
+<section id="embedded-use">
+<h2>Embedded use<a class="headerlink" href="#embedded-use" title="Permalink to this heading">#</a></h2>
+<p>Here “embedded” means running in the same process as your program.
+As <code class="docutils literal notranslate"><span class="pre">cozoserver</span></code> is just a very thin wrapper around the Cozo rust library,
+you can use the library directly in your program.</p>
+<p>For languages other than Rust, you will need to provide custom bindings,
+but again for <a class="reference external" href="https://pyo3.rs/">Python</a> and <a class="reference external" href="https://neon-bindings.com/">NodeJS</a> this is trivial.</p>
+<p>As Cozo uses RocksDB as its storage engine, it probably makes a lot less sense to use embedded Cozo than SQLite,
+since RocksDB always uses multiple threads and always has background threads running,
+unlike SQLite for which a connection uses only a single thread.</p>
+</section>
 </section>
 
         </article>
@@ -449,6 +460,7 @@ which, depending on your workload, can make a difference in performance.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-cozo-from-source">Building Cozo from source</a></li>
+<li><a class="reference internal" href="#embedded-use">Embedded use</a></li>
 </ul>
 </li>
 </ul>
