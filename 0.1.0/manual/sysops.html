@@ -226,32 +226,45 @@ subject to magic-set rewrites, the returned data is pretty self-explanatory.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">columns</span> <span class="pre">&lt;REL_NAME&gt;</span></span></dt>
+<span class="sig-name descname"><span class="pre">::columns</span> <span class="pre">&lt;REL_NAME&gt;</span></span></dt>
 <dd><p>List all columns for the stored relation <code class="docutils literal notranslate"><span class="pre">&lt;REL_NAME&gt;</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">remove</span> <span class="pre">&lt;REL_NAME&gt;</span> <span class="pre">(,</span> <span class="pre">&lt;REL_NAME&gt;)*</span></span></dt>
+<span class="sig-name descname"><span class="pre">::remove</span> <span class="pre">&lt;REL_NAME&gt;</span> <span class="pre">(,</span> <span class="pre">&lt;REL_NAME&gt;)*</span></span></dt>
 <dd><p>Remove stored relations. Several can be specified, joined by commas.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">rename</span> <span class="pre">&lt;OLD_NAME&gt;</span> <span class="pre">-&gt;</span> <span class="pre">&lt;NEW_NAME&gt;</span> <span class="pre">(,</span> <span class="pre">&lt;OLD_NAME&gt;</span> <span class="pre">-&gt;</span> <span class="pre">&lt;NEW_NAME&gt;)*</span></span></dt>
+<span class="sig-name descname"><span class="pre">::rename</span> <span class="pre">&lt;OLD_NAME&gt;</span> <span class="pre">-&gt;</span> <span class="pre">&lt;NEW_NAME&gt;</span> <span class="pre">(,</span> <span class="pre">&lt;OLD_NAME&gt;</span> <span class="pre">-&gt;</span> <span class="pre">&lt;NEW_NAME&gt;)*</span></span></dt>
 <dd><p>Rename stored relation <code class="docutils literal notranslate"><span class="pre">&lt;OLD_NAME&gt;</span></code> into <code class="docutils literal notranslate"><span class="pre">&lt;NEW_NAME&gt;</span></code>. Several may be specified, joined by commas.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">show_triggers</span> <span class="pre">&lt;REL_NAME&gt;</span></span></dt>
+<span class="sig-name descname"><span class="pre">::show_triggers</span> <span class="pre">&lt;REL_NAME&gt;</span></span></dt>
 <dd><p>Display triggers associated with the stored relation <code class="docutils literal notranslate"><span class="pre">&lt;REL_NAME&gt;</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::relation</span> <span class="pre">set_triggers</span> <span class="pre">&lt;REL_NAME&gt;</span> <span class="pre">&lt;TRIGGERS&gt;</span></span></dt>
+<span class="sig-name descname"><span class="pre">::set_triggers</span> <span class="pre">&lt;REL_NAME&gt;</span> <span class="pre">&lt;TRIGGERS&gt;</span></span></dt>
 <dd><p>Set triggers for the stored relation <code class="docutils literal notranslate"><span class="pre">&lt;REL_NAME&gt;</span></code>. This is explained in more detail in the transactions chapter.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">::access_level</span> <span class="pre">&lt;REL_NAME&gt;</span> <span class="pre">&lt;ACCESS_LEVEL&gt;</span></span></dt>
+<dd><p>Sets the access level of <code class="docutils literal notranslate"><span class="pre">&lt;REL_NAME&gt;</span></code> to the given level. The levels are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">normal</span></code> allows everything,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">protected</span></code> disallows <code class="docutils literal notranslate"><span class="pre">::remove</span></code> and <code class="docutils literal notranslate"><span class="pre">:replace</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">read_only</span></code> additionally disallows any mutations and setting triggers,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hidden</span></code> additionally disallows any data access (metadata access via <code class="docutils literal notranslate"><span class="pre">::relations</span></code>, etc., are still allowed).</p></li>
+</ul>
+<p>It is recommended to give the appropriate access levels to tables to prevent data loss from programming mistakes.</p>
 </dd></dl>
 
 </section>

@@ -16848,7 +16848,7 @@ However, as a database, we need to know how to store data persistently. In Cozo,
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[40]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="p">::</span><span class="n">relation</span> <span class="n">columns</span> <span class="n">stored</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">::</span><span class="n">columns</span> <span class="n">stored</span> 
 </pre></div>
 
      </div>
@@ -17533,7 +17533,7 @@ This is especially useful if you have a lot of columns:</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[49]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="p">::</span><span class="n">relation</span> <span class="n">remove</span> <span class="n">stored</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">::</span><span class="n">remove</span> <span class="n">stored</span>
 </pre></div>
 
      </div>
@@ -18059,7 +18059,7 @@ You can instruct Cozo to only treat some of the data as keys, thereby indicating
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[59]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="p">::</span><span class="n">relation</span> <span class="n">columns</span> <span class="n">fd</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">::</span><span class="n">columns</span> <span class="n">fd</span>
 </pre></div>
 
      </div>
@@ -18170,6 +18170,18 @@ We won't overload you with all the complexities in this tutorial.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>The stored relations API are designed to be easy to use. However, sometimes being too easy can be bad, for example, it is possible to wipe an important stored relation full of data by a <code>:replace</code> erroneously introduced in a rarely used piece of code somewhere. For valuable stored relations, therefore, we recommend that you set the appropriate <em>access level</em>, as explained <a href="https://cozodb.github.io/current/manual/stored.html#stored-relations">here</a>.</p>
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>Before continuing, let's remove the stored relation we introduced:</p>
 
 </div>
@@ -18183,7 +18195,7 @@ We won't overload you with all the complexities in this tutorial.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[60]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="p">::</span><span class="n">relation</span> <span class="n">remove</span> <span class="n">fd</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">::</span><span class="n">remove</span> <span class="n">fd</span>
 </pre></div>
 
      </div>
@@ -20764,7 +20776,7 @@ As the same file will be downloaded multiple times below, you may also want to d
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[103]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="p">::</span><span class="n">relation</span> <span class="n">remove</span> <span class="n">idx2code</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">::</span><span class="n">remove</span> <span class="n">idx2code</span>
 </pre></div>
 
      </div>
