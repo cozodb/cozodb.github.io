@@ -388,6 +388,31 @@ They are run before any <code class="docutils literal notranslate"><span class="
 <p>All triggers for a relation must be specified together, in the same system op.
 In other words, <code class="docutils literal notranslate"><span class="pre">::relation</span> <span class="pre">set_triggers</span></code> simply replaces all the triggers associated with a stored relation.
 To remove all triggers from a stored relation, simply pass no queries for the system op.</p>
+<p>As a very simple example of using triggers to make index, let’s say we have the following relation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">create</span> <span class="n">rel</span> <span class="p">{</span><span class="n">a</span> <span class="o">=&gt;</span> <span class="n">b</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>However, we often want to use <code class="docutils literal notranslate"><span class="pre">*rel[a,</span> <span class="pre">b]</span></code> with <code class="docutils literal notranslate"><span class="pre">b</span></code> bound but <code class="docutils literal notranslate"><span class="pre">a</span></code> unbound. This will cause a full scan,
+which can be expensive. So we really need an index:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">create</span> <span class="n">rel</span><span class="o">.</span><span class="n">rev</span> <span class="p">{</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>In the generate case, we cannot assume a functional dependency <code class="docutils literal notranslate"><span class="pre">b</span> <span class="pre">=&gt;</span> <span class="pre">a</span></code>, so here both fields appear as keys.</p>
+<p>To manage the index automatically, simply do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>::relation set_triggers rel
+
+on put {
+    ?[a, b] := _new[a, b]
+
+    :put rel.rev{ b, a }
+}
+on rm {
+    ?[a, b] := _old[a, b]
+
+    :rm rel.rev{ b, a }
+}
+</pre></div>
+</div>
 <p>Besides indices, creative use of triggers abounds, but you must consider the maintenance burden they introduce.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
