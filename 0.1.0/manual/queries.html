@@ -371,7 +371,7 @@ Or you can give a timeout for the query when you submit.</p>
 <p>CozoScript supports aggregations, as does SQL, which provides a very useful extension to pure relational algebra.
 In CozoScript, aggregations are specified for inline rules by applying aggregation operators to variables
 in the rule head, as in:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[department, count(employee)] := :personnel{department, employee}
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[department, count(employee)] := *personnel{department, employee}
 </pre></div>
 </div>
 <p>here we have used the <code class="docutils literal notranslate"><span class="pre">count</span></code> operator familiar to all SQL users.
@@ -383,11 +383,11 @@ With the introduction of aggregations, the situation is a little bit more compli
 as aggregations are applied to the relation resulting from the body of the rule using bag semantics,
 and the resulting relation of the rule, after aggregations are applied, follows set semantics.
 The reason for this complication is that if aggregations are applied with set semantics, then the following query:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[count(employee)] := :personnel{employee}
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[count(employee)] := *personnel{employee}
 </pre></div>
 </div>
 <p>does not do what you expect: it either returns a row with a single value <code class="docutils literal notranslate"><span class="pre">1</span></code> if there are any matching rows,
-or it returns nothing at all if the stored relation <code class="docutils literal notranslate"><span class="pre">:personnel</span></code> is empty.
+or it returns nothing at all if the stored relation <code class="docutils literal notranslate"><span class="pre">*personnel</span></code> is empty.
 Though semantically sound, this behaviour is not useful at all.
 So for aggregations, we opt for bag semantics, and the query does what one expects.</p>
 <p>If a rule has several definitions, they must have identical aggregations applied in the same positions,
@@ -418,10 +418,10 @@ unless that rule is the same rule (self-recursion) and all aggregations in its h
 then takes a specified number of named or stored relations as its <em>input relations</em>,
 followed by <em>options</em> that you provide.
 The following query is a calculation of PageRank:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[] &lt;~ PageRank(:route[], theta: 0.5)
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[] &lt;~ PageRank(*route[], theta: 0.5)
 </pre></div>
 </div>
-<p>In the above example, the relation <code class="docutils literal notranslate"><span class="pre">:route</span></code> is the single input relation expected.
+<p>In the above example, the relation <code class="docutils literal notranslate"><span class="pre">*route</span></code> is the single input relation expected.
 Input relations may be stored relations or relations resulting from rules.
 Each utility/algorithm expects specific shapes of input relations,
 for example, PageRank expects the first two columns of the relation to denote the source and destination
@@ -447,7 +447,7 @@ is for the entry rule.</p>
 <section id="query-options">
 <h2>Query options<a class="headerlink" href="#query-options" title="Permalink to this heading">#</a></h2>
 <p>Each query can have query options associated with it:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[name] := :personnel{name}
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[name] := *personnel{name}
 
 :limit 10
 :offset 20

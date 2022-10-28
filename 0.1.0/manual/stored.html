@@ -298,14 +298,26 @@ As an example, if you do not care about type validation, the above query can be 
 You can also explicitly specify the correspondence:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[a, b, count(c)] &lt;- $input_data
 
-:create dept_info { company_name = a, department_name = b, =&gt; head_count = count(c), address = b }
+:create dept_info {
+    company_name = a,
+    department_name = b,
+    =&gt;
+    head_count = count(c),
+    address = b
+}
 </pre></div>
 </div>
 <p>You <em>must</em> use explicit correspondence if the entry head contains aggregation.</p>
 <p>Instead of specifying bindings, you can specify an expression to generate values:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[a, b] &lt;- $input_data
 
-:create dept_info { company_name = a, department_name = b, =&gt; head_count default 0, address default &#39;&#39; }
+:create dept_info {
+    company_name = a,
+    department_name = b,
+    =&gt;
+    head_count default 0,
+    address default &#39;&#39;
+}
 </pre></div>
 </div>
 <p>The expression is evaluated once for each row, so for example if you specified one of the UUID-generating functions,
