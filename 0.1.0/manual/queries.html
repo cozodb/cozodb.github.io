@@ -255,19 +255,19 @@ unified with in the named relation.</p>
 at this point, this unification will only succeed when the unified value is the same as the previously unified value.
 In other words, repeated use of the same variable in named rules corresponds to inner joins in relational algebra.</p>
 <p>Another flavour of atoms is the <em>stored relation</em>. It may be written similarly to a rule application:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">stored_relation</span><span class="p">[</span><span class="n">bind1</span><span class="p">,</span> <span class="n">bind2</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">stored_relation</span><span class="p">[</span><span class="n">bind1</span><span class="p">,</span> <span class="n">bind2</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>with the colon in front of the stored relation name to distinguish it from rule application.
 Written in this way, you must give as many bindings to the stored relation as its arity,
 and the bindings proceed by argument positions, which may be cumbersome and error-prone.
 So alternatively, you may use the fact that columns of a stored relation are always named and bind by name:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="n">stored_relation</span><span class="p">{</span><span class="n">col1</span><span class="p">:</span> <span class="n">bind1</span><span class="p">,</span> <span class="n">col2</span><span class="p">:</span> <span class="n">bind2</span><span class="p">}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">stored_relation</span><span class="p">{</span><span class="n">col1</span><span class="p">:</span> <span class="n">bind1</span><span class="p">,</span> <span class="n">col2</span><span class="p">:</span> <span class="n">bind2</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>In this case, you only need to bind as many variables as you use.
 If the name you want to give the binding is the same as the name of the column, you may use the shorthand notation:
-<code class="docutils literal notranslate"><span class="pre">:stored_relation{col1}</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">:stored_relation{col1:</span> <span class="pre">col1}</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">*stored_relation{col1}</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">*stored_relation{col1:</span> <span class="pre">col1}</span></code>.</p>
 <p><em>Expressions</em> are also atoms, such as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span>
 </pre></div>
