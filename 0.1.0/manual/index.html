@@ -161,7 +161,7 @@
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
@@ -210,7 +210,7 @@
 <li class="toctree-l2"><a class="reference internal" href="setup.html#the-query-api">The query API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html#running-queries">Running queries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html#building-cozo-from-source">Building Cozo from source</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#embedded-use">Embedded use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#embedding-cozo">Embedding Cozo</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a><ul>
@@ -227,23 +227,24 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sysops.html#explain">Explain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sysops.html#ops-on-stored-relations">Ops on stored relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysops.html#ops-for-stored-relations">Ops for stored relations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sysops.html#monitor-and-kill">Monitor and kill</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sysops.html#maintenance">Maintenance</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="datatypes.html#value-types">Value types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="datatypes.html#value-literals">Value literals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="datatypes.html#runtime-types">Runtime types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatypes.html#literals">Literals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datatypes.html#column-types">Column types</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="execution.html#disjunctive-normal-form">Disjunctive normal form</a></li>
 <li class="toctree-l2"><a class="reference internal" href="execution.html#stratification">Stratification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="execution.html#magic-set-rewrites">Magic set rewrites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="execution.html#semi-naive-evaluation">Semi-naïve evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="execution.html#ordering-of-atoms">Ordering of atoms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="execution.html#relations-as-indices">Relations as indices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="execution.html#evaluating-atoms">Evaluating atoms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="execution.html#early-stopping">Early stopping</a></li>
 </ul>
 </li>
@@ -261,7 +262,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="aggregations.html#meet-aggregations">Meet aggregations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aggregations.html#semi-lattice-aggregations">Semi-lattice aggregations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="aggregations.html#ordinary-aggregations">Ordinary aggregations</a></li>
 </ul>
 </li>

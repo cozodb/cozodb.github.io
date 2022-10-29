@@ -159,7 +159,7 @@
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
@@ -214,7 +214,7 @@
 </li>
         <li><a href="functions.html#Func.Math.add">add() (in module Func.Math)</a>
 </li>
-        <li><a href="aggregations.html#Aggr.Meet.and">and() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.and">and() (in module Aggr.SemiLattice)</a>
 
         <ul>
           <li><a href="functions.html#Func.Bool.and">(in module Func.Bool)</a>
@@ -248,7 +248,7 @@
 </li>
         <li><a href="algorithms.html#Algo.BFS">BFS() (in module Algo)</a>
 </li>
-        <li><a href="aggregations.html#Aggr.Meet.bit_and">bit_and() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.bit_and">bit_and() (in module Aggr.SemiLattice)</a>
 
         <ul>
           <li><a href="functions.html#Func.Bin.bit_and">(in module Func.Bin)</a>
@@ -258,7 +258,7 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="aggregations.html#Aggr.Meet.bit_or">bit_or() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.bit_or">bit_or() (in module Aggr.SemiLattice)</a>
 
         <ul>
           <li><a href="functions.html#Func.Bin.bit_or">(in module Func.Bin)</a>
@@ -284,9 +284,9 @@
 </li>
         <li><a href="functions.html#Func.String.chars">chars() (in module Func.String)</a>
 </li>
-        <li><a href="aggregations.html#Aggr.Meet.choice">choice() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.choice">choice() (in module Aggr.SemiLattice)</a>
 </li>
-        <li><a href="aggregations.html#Aggr.Meet.choice_last">choice_last() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.choice_last">choice_last() (in module Aggr.SemiLattice)</a>
 </li>
         <li><a href="aggregations.html#Aggr.Ord.choice_rand">choice_rand() (in module Aggr.Ord)</a>
 </li>
@@ -298,7 +298,7 @@
 </li>
         <li><a href="algorithms.html#Algo.ClusteringCoefficients">ClusteringCoefficients() (in module Algo)</a>
 </li>
-        <li><a href="aggregations.html#Aggr.Meet.coalesce">coalesce() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.coalesce">coalesce() (in module Aggr.SemiLattice)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
@@ -428,7 +428,7 @@
   <h2>I</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="aggregations.html#Aggr.Meet.intersection">intersection() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.intersection">intersection() (in module Aggr.SemiLattice)</a>
 
         <ul>
           <li><a href="functions.html#Func.List.intersection">(in module Func.List)</a>
@@ -526,7 +526,7 @@
   <h2>M</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="aggregations.html#Aggr.Meet.max">max() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.max">max() (in module Aggr.SemiLattice)</a>
 
         <ul>
           <li><a href="functions.html#Func.EqCmp.max">(in module Func.EqCmp)</a>
@@ -536,7 +536,7 @@
 </li>
         <li><a href="aggregations.html#Aggr.Ord.mean">mean() (in module Aggr.Ord)</a>
 </li>
-        <li><a href="aggregations.html#Aggr.Meet.min">min() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.min">min() (in module Aggr.SemiLattice)</a>
 
         <ul>
           <li><a href="functions.html#Func.EqCmp.min">(in module Func.EqCmp)</a>
@@ -544,7 +544,7 @@
         </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="aggregations.html#Aggr.Meet.min_cost">min_cost() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.min_cost">min_cost() (in module Aggr.SemiLattice)</a>
 </li>
         <li><a href="algorithms.html#Algo.MinimumSpanningForestKruskal">MinimumSpanningForestKruskal() (in module Algo)</a>
 </li>
@@ -580,7 +580,7 @@
   <h2>O</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="aggregations.html#Aggr.Meet.or">or() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.or">or() (in module Aggr.SemiLattice)</a>
 
         <ul>
           <li><a href="functions.html#Func.Bool.or">(in module Func.Bool)</a>
@@ -660,7 +660,7 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="algorithms.html#Algo.SCC">SCC() (in module Algo)</a>
 </li>
-        <li><a href="aggregations.html#Aggr.Meet.shortest">shortest() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.shortest">shortest() (in module Aggr.SemiLattice)</a>
 </li>
         <li><a href="algorithms.html#Algo.ShortestPathAStar">ShortestPathAStar() (in module Algo)</a>
 </li>
@@ -728,7 +728,7 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="functions.html#Func.String.unicode_normalize">unicode_normalize() (in module Func.String)</a>
 </li>
-        <li><a href="aggregations.html#Aggr.Meet.union">union() (in module Aggr.Meet)</a>
+        <li><a href="aggregations.html#Aggr.SemiLattice.union">union() (in module Aggr.SemiLattice)</a>
 
         <ul>
           <li><a href="functions.html#Func.List.union">(in module Func.List)</a>

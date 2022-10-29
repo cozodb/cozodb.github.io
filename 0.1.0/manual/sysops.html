@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Datatypes" href="datatypes.html" /><link rel="prev" title="Stored relations and transactions" href="stored.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Types" href="datatypes.html" /><link rel="prev" title="Stored relations and transactions" href="stored.html" />
         <link rel="canonical" href="/manual/sysops.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
@@ -161,7 +161,7 @@
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">System ops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
@@ -207,21 +207,21 @@ In the following, we explain what each system op does, and the arguments they ex
 <h2>Explain<a class="headerlink" href="#explain" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::explain</span> <span class="pre">{</span> <span class="pre">&lt;query&gt;</span> <span class="pre">}</span></span></dt>
+<span class="sig-name descname"><span class="pre">::explain</span> <span class="pre">{</span> <span class="pre">&lt;QUERY&gt;</span> <span class="pre">}</span></span></dt>
 <dd><p>A single query is enclosed in curly braces. Query options are allowed but ignored.
 The query is not executed, but its query plan is returned instead.
 Currently, there is no specification for the return format,
 but if you are familiar with the semi-naïve evaluation of stratified Datalog programs
-subject to magic-set rewrites, the returned data is pretty self-explanatory.</p>
+subject to magic-set rewrites, you can decipher the result.</p>
 </dd></dl>
 
 </section>
-<section id="ops-on-stored-relations">
-<h2>Ops on stored relations<a class="headerlink" href="#ops-on-stored-relations" title="Permalink to this heading">#</a></h2>
+<section id="ops-for-stored-relations">
+<h2>Ops for stored relations<a class="headerlink" href="#ops-for-stored-relations" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">::relations</span></span></dt>
-<dd><p>List all stored relations currently in the database</p>
+<dd><p>List all stored relations in the database</p>
 </dd></dl>
 
 <dl class="py function">
@@ -250,8 +250,8 @@ subject to magic-set rewrites, the returned data is pretty self-explanatory.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">::set_triggers</span> <span class="pre">&lt;REL_NAME&gt;</span> <span class="pre">&lt;TRIGGERS&gt;</span></span></dt>
-<dd><p>Set triggers for the stored relation <code class="docutils literal notranslate"><span class="pre">&lt;REL_NAME&gt;</span></code>. This is explained in more detail in the transactions chapter.</p>
+<span class="sig-name descname"><span class="pre">::set_triggers</span> <span class="pre">&lt;REL_NAME&gt;</span> <span class="pre">...</span></span></dt>
+<dd><p>Set triggers for the stored relation <code class="docutils literal notranslate"><span class="pre">&lt;REL_NAME&gt;</span></code>. This is explained in more detail in the transaction chapter.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -264,7 +264,8 @@ subject to magic-set rewrites, the returned data is pretty self-explanatory.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">read_only</span></code> additionally disallows any mutations and setting triggers,</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">hidden</span></code> additionally disallows any data access (metadata access via <code class="docutils literal notranslate"><span class="pre">::relations</span></code>, etc., are still allowed).</p></li>
 </ul>
-<p>It is recommended to give the appropriate access levels to tables to prevent data loss from programming mistakes.</p>
+<p>The access level functionality is to protect data from mistakes of the programmer,
+not from attacks by malicious parties.</p>
 </dd></dl>
 
 </section>
@@ -273,7 +274,7 @@ subject to magic-set rewrites, the returned data is pretty self-explanatory.</p>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">::running</span></span></dt>
-<dd><p>Display currently running queries and their IDs.</p>
+<dd><p>Display running queries and their IDs.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -288,8 +289,8 @@ subject to magic-set rewrites, the returned data is pretty self-explanatory.</p>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">::compact</span></span></dt>
-<dd><p>Run compaction on the database. Running this may make the database smaller on disk and faster for queries,
-but running the op itself may take some time in the background.</p>
+<dd><p>Instructs Cozo to run a compaction job.
+Compaction makes the database smaller on disk and faster for read queries.</p>
 </dd></dl>
 
 </section>
@@ -305,7 +306,7 @@ but running the op itself may take some time in the background.</p>
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Datatypes</div>
+                <div class="title">Types</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -354,7 +355,7 @@ but running the op itself may take some time in the background.</p>
             <ul>
 <li><a class="reference internal" href="#">System ops</a><ul>
 <li><a class="reference internal" href="#explain">Explain</a></li>
-<li><a class="reference internal" href="#ops-on-stored-relations">Ops on stored relations</a></li>
+<li><a class="reference internal" href="#ops-for-stored-relations">Ops for stored relations</a></li>
 <li><a class="reference internal" href="#monitor-and-kill">Monitor and kill</a></li>
 <li><a class="reference internal" href="#maintenance">Maintenance</a></li>
 </ul>

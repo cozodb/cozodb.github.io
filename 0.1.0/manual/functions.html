@@ -161,7 +161,7 @@
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
@@ -201,14 +201,14 @@
         <article role="main">
           <section id="functions">
 <h1>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h1>
-<p>Functions can be used in expressions in Cozo. All function arguments in Cozo are immutable. All functions except those having names starting with <code class="docutils literal notranslate"><span class="pre">rand_</span></code> are deterministic.</p>
-<p>Internally, all function arguments are partially evaluated before binding variables to input tuples. For example, the regular expression in <code class="docutils literal notranslate"><span class="pre">regex_matches(var,</span> <span class="pre">'[a-zA-Z]+')</span></code> will only be compiled once during the execution of the query, instead of being repeatedly compiled for every input tuple.</p>
+<p>Functions can be used to build expressions.</p>
+<p>In the following, all functions except those having names starting with <code class="docutils literal notranslate"><span class="pre">rand_</span></code> are deterministic.</p>
 <section id="equality-and-comparisons">
 <h2>Equality and Comparisons<a class="headerlink" href="#equality-and-comparisons" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.EqCmp.eq">
 <span class="sig-name descname"><span class="pre">eq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.EqCmp.eq" title="Permalink to this definition">#</a></dt>
-<dd><p>Equality comparison. The operator form is <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">y</span></code> or <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">y</span></code>. The two arguments of the equality can be of different types, in which case the result is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<dd><p>Equality comparison. The operator form is <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">y</span></code>. The two arguments of the equality can be of different types, in which case the result is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -243,7 +243,7 @@
 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The four comparison operators can only compare values of the same value type. Integers and floats are of the same type <code class="docutils literal notranslate"><span class="pre">Number</span></code>.</p>
+<p>The four comparison operators can only compare values of the same runtime type. Integers and floats are of the same type <code class="docutils literal notranslate"><span class="pre">Number</span></code>.</p>
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.EqCmp.max">
@@ -392,19 +392,19 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.Math.sin">
 <span class="sig-name descname"><span class="pre">sin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.sin" title="Permalink to this definition">#</a></dt>
-<dd><p>The sine trigonometric Func.</p>
+<dd><p>The sine trigonometric function.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.Math.cos">
 <span class="sig-name descname"><span class="pre">cos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.cos" title="Permalink to this definition">#</a></dt>
-<dd><p>The cosine trigonometric Func.</p>
+<dd><p>The cosine trigonometric function.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.Math.tan">
 <span class="sig-name descname"><span class="pre">tan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.tan" title="Permalink to this definition">#</a></dt>
-<dd><p>The tangent trigonometric Func.</p>
+<dd><p>The tangent trigonometric function.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -482,19 +482,27 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.Math.haversine">
 <span class="sig-name descname"><span class="pre">haversine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_lon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.haversine" title="Permalink to this definition">#</a></dt>
-<dd><p>Computes with the <a class="reference external" href="https://en.wikipedia.org/wiki/Haversine_formula">haversine formula</a> the angle measured in radians between two points <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> on a sphere specified by their latitudes and longitudes. The inputs are in radians. You probably want the next function since most maps measure angles in radians.</p>
+<dd><p>Computes with the <a class="reference external" href="https://en.wikipedia.org/wiki/Haversine_formula">haversine formula</a>
+the angle measured in radians between two points <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> on a sphere
+specified by their latitudes and longitudes. The inputs are in radians.
+You probably want the next function when you are dealing with maps,
+since most maps measure angles in degrees instead of radians.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.Math.haversine_deg_input">
 <span class="sig-name descname"><span class="pre">haversine_deg_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_lon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.haversine_deg_input" title="Permalink to this definition">#</a></dt>
-<dd><p>Same as the previous function, but the inputs are in degrees instead of radians. The return value is still in radians. If you want the approximate distance measured on the surface of the earth instead of the angle between two points, multiply the result by the radius of the earth, which is about <code class="docutils literal notranslate"><span class="pre">6371</span></code> kilometres, <code class="docutils literal notranslate"><span class="pre">3959</span></code> miles, or <code class="docutils literal notranslate"><span class="pre">3440</span></code> nautical miles.</p>
-</dd></dl>
-
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
+<dd><p>Same as the previous function, but the inputs are in degrees instead of radians.
+The return value is still in radians.</p>
+<p>If you want the approximate distance measured on the surface of the earth instead of the angle between two points,
+multiply the result by the radius of the earth,
+which is about <code class="docutils literal notranslate"><span class="pre">6371</span></code> kilometres, <code class="docutils literal notranslate"><span class="pre">3959</span></code> miles, or <code class="docutils literal notranslate"><span class="pre">3440</span></code> nautical miles.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>The haversine formula, when applied to the surface of the earth, which is not a perfect sphere, can result in an error of less than one percent.</p>
 </div>
+</dd></dl>
+
 </section>
 <section id="string-functions">
 <h2>String functions<a class="headerlink" href="#string-functions" title="Permalink to this heading">#</a></h2>
@@ -503,12 +511,14 @@
 <span class="sig-name descname"><span class="pre">length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.length" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns the number of Unicode characters in the string.</p>
 <p>Can also be applied to a list or a byte array.</p>
-</dd></dl>
-
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p><code class="docutils literal notranslate"><span class="pre">length(str)</span></code> does not return the number of bytes of the string representation. Also, what is returned depends on the normalization of the string. So if such details are important, apply <code class="docutils literal notranslate"><span class="pre">unicode_normalize</span></code> before <code class="docutils literal notranslate"><span class="pre">length</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">length(str)</span></code> does not return the number of bytes of the string representation.
+Also, what is returned depends on the normalization of the string.
+So if such details are important, apply <code class="docutils literal notranslate"><span class="pre">unicode_normalize</span></code> before <code class="docutils literal notranslate"><span class="pre">length</span></code>.</p>
 </div>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.String.concat">
 <span class="sig-name descname"><span class="pre">concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.concat" title="Permalink to this definition">#</a></dt>
@@ -556,12 +566,13 @@
 <dt class="sig sig-object py" id="Func.String.starts_with">
 <span class="sig-name descname"><span class="pre">starts_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.starts_with" title="Permalink to this definition">#</a></dt>
 <dd><p>Tests if <code class="docutils literal notranslate"><span class="pre">x</span></code> starts with <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
-</dd></dl>
-
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p><code class="docutils literal notranslate"><span class="pre">starts_with(var,</span> <span class="pre">str)</span></code> is prefered over equivalent (e.g. regex) conditions, since the compiler may more easily compile the clause into a range scan.</p>
+<p><code class="docutils literal notranslate"><span class="pre">starts_with(var,</span> <span class="pre">str)</span></code> is preferred over equivalent (e.g. regex) conditions,
+since the compiler may more easily compile the clause into a range scan.</p>
 </div>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.String.ends_with">
 <span class="sig-name descname"><span class="pre">ends_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.ends_with" title="Permalink to this definition">#</a></dt>
@@ -571,7 +582,8 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.String.unicode_normalize">
 <span class="sig-name descname"><span class="pre">unicode_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.unicode_normalize" title="Permalink to this definition">#</a></dt>
-<dd><p>Converts <code class="docutils literal notranslate"><span class="pre">str</span></code> to the <a class="reference external" href="https://en.wikipedia.org/wiki/Unicode_equivalence">normalization</a> specified by <code class="docutils literal notranslate"><span class="pre">norm</span></code>. The valid values of <code class="docutils literal notranslate"><span class="pre">norm</span></code> are <code class="docutils literal notranslate"><span class="pre">'nfc'</span></code>, <code class="docutils literal notranslate"><span class="pre">'nfd'</span></code>, <code class="docutils literal notranslate"><span class="pre">'nfkc'</span></code> and <code class="docutils literal notranslate"><span class="pre">'nfkd'</span></code>.</p>
+<dd><p>Converts <code class="docutils literal notranslate"><span class="pre">str</span></code> to the <a class="reference external" href="https://en.wikipedia.org/wiki/Unicode_equivalence">normalization</a> specified by <code class="docutils literal notranslate"><span class="pre">norm</span></code>.
+The valid values of <code class="docutils literal notranslate"><span class="pre">norm</span></code> are <code class="docutils literal notranslate"><span class="pre">'nfc'</span></code>, <code class="docutils literal notranslate"><span class="pre">'nfd'</span></code>, <code class="docutils literal notranslate"><span class="pre">'nfkc'</span></code> and <code class="docutils literal notranslate"><span class="pre">'nfkd'</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -584,12 +596,13 @@
 <dt class="sig sig-object py" id="Func.String.from_substrings">
 <span class="sig-name descname"><span class="pre">from_substrings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.from_substrings" title="Permalink to this definition">#</a></dt>
 <dd><p>Combines the strings in <code class="docutils literal notranslate"><span class="pre">list</span></code> into a big string. In a sense, it is the inverse function of <code class="docutils literal notranslate"><span class="pre">chars</span></code>.</p>
-</dd></dl>
-
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>If you want substring slices, indexing strings, etc., first convert the string to a list with <code class="docutils literal notranslate"><span class="pre">chars</span></code>, do the manipulation on the list, and then recombine with <code class="docutils literal notranslate"><span class="pre">from_substring</span></code>. Hopefully, the omission of functions doing such things directly can make people more aware of the complexities involved in manipulating strings (and getting the <em>correct</em> result).</p>
+<p>If you want substring slices, indexing strings, etc., first convert the string to a list with <code class="docutils literal notranslate"><span class="pre">chars</span></code>,
+do the manipulation on the list, and then recombine with <code class="docutils literal notranslate"><span class="pre">from_substring</span></code>.</p>
 </div>
+</dd></dl>
+
 </section>
 <section id="list-functions">
 <h2>List functions<a class="headerlink" href="#list-functions" title="Permalink to this heading">#</a></h2>
@@ -620,13 +633,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.List.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.get" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns the element at index <code class="docutils literal notranslate"><span class="pre">n</span></code> in the list <code class="docutils literal notranslate"><span class="pre">l</span></code>. This function will raise an error if the access is out of bounds. Indices start with 0.</p>
+<dd><p>Returns the element at index <code class="docutils literal notranslate"><span class="pre">n</span></code> in the list <code class="docutils literal notranslate"><span class="pre">l</span></code>. Raises an error if the access is out of bounds. Indices start with 0.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.List.maybe_get">
 <span class="sig-name descname"><span class="pre">maybe_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.maybe_get" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns the element at index <code class="docutils literal notranslate"><span class="pre">n</span></code> in the list <code class="docutils literal notranslate"><span class="pre">l</span></code>. This function will return <code class="docutils literal notranslate"><span class="pre">null</span></code> if the access is out of bounds. Indices start with 0.</p>
+<dd><p>Returns the element at index <code class="docutils literal notranslate"><span class="pre">n</span></code> in the list <code class="docutils literal notranslate"><span class="pre">l</span></code>. Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if the access is out of bounds. Indices start with 0.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -639,7 +652,9 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.List.slice">
 <span class="sig-name descname"><span class="pre">slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.slice" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns the slice of list between the index <code class="docutils literal notranslate"><span class="pre">start</span></code> (inclusive) and <code class="docutils literal notranslate"><span class="pre">end</span></code> (exclusive). Negative numbers may be used, which is interpreted as counting from the end of the list. E.g. <code class="docutils literal notranslate"><span class="pre">slice([1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4],</span> <span class="pre">1,</span> <span class="pre">3)</span> <span class="pre">==</span> <span class="pre">[2,</span> <span class="pre">3]</span></code>, <code class="docutils literal notranslate"><span class="pre">slice([1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4],</span> <span class="pre">1,</span> <span class="pre">-1)</span> <span class="pre">==</span> <span class="pre">[2,</span> <span class="pre">3]</span></code>.</p>
+<dd><p>Returns the slice of list between the index <code class="docutils literal notranslate"><span class="pre">start</span></code> (inclusive) and <code class="docutils literal notranslate"><span class="pre">end</span></code> (exclusive).
+Negative numbers may be used, which is interpreted as counting from the end of the list.
+E.g. <code class="docutils literal notranslate"><span class="pre">slice([1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4],</span> <span class="pre">1,</span> <span class="pre">3)</span> <span class="pre">==</span> <span class="pre">[2,</span> <span class="pre">3]</span></code>, <code class="docutils literal notranslate"><span class="pre">slice([1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4],</span> <span class="pre">1,</span> <span class="pre">-1)</span> <span class="pre">==</span> <span class="pre">[2,</span> <span class="pre">3]</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -759,12 +774,12 @@
 <dt class="sig sig-object py" id="Func.Bin.encode_base64">
 <span class="sig-name descname"><span class="pre">encode_base64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bin.encode_base64" title="Permalink to this definition">#</a></dt>
 <dd><p>Encodes the byte array <code class="docutils literal notranslate"><span class="pre">b</span></code> into the <a class="reference external" href="https://en.wikipedia.org/wiki/Base64">Base64</a>-encoded string.</p>
-</dd></dl>
-
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><code class="docutils literal notranslate"><span class="pre">encode_base64</span></code> is automatically applied when output to JSON since JSON cannot represent bytes natively.</p>
 </div>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="Func.Bin.decode_base64">
 <span class="sig-name descname"><span class="pre">decode_base64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bin.decode_base64" title="Permalink to this definition">#</a></dt>

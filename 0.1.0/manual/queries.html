@@ -161,7 +161,7 @@
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
@@ -201,28 +201,28 @@
         <article role="main">
           <section id="queries">
 <h1>Queries<a class="headerlink" href="#queries" title="Permalink to this heading">#</a></h1>
-<p>The Cozo database system is queried using the CozoScript language.
-At its core, CozoScript is a <a class="reference external" href="https://en.wikipedia.org/wiki/Datalog">Datalog</a> dialect
-supporting stratified negation and stratified recursive meet-aggregations.
-The built-in utilities and algorithms (mainly graph algorithms) further empower
-CozoScript for much greater ease of use and much wider applicability.</p>
-<p>A query consists of one or many named rules.
-Each named rule conceptually represents a relation or a table with rows and columns.
-The rule named <code class="docutils literal notranslate"><span class="pre">?</span></code> is called the entry to the query,
-and its associated relation is returned as the result of the query.
-Each named rule has associated with it a rule head, which names the columns of the relation,
+<p>CozoScript, a <a class="reference external" href="https://en.wikipedia.org/wiki/Datalog">Datalog</a> dialect, is the query language of Cozo.</p>
+<p>A CozoScript query consists of one or many named rules.
+Each named rule represents a <em>relation</em>, i.e. collection of data divided into rows and columns.
+The rule named <code class="docutils literal notranslate"><span class="pre">?</span></code> is the <em>entry</em> to the query,
+and the relation it represents is the result of the query.
+Each named rule has a rule head, which corresponds to the columns of the relation,
 and a rule body, which specifies the content of the relation, or how the content should be computed.</p>
-<p>In CozoScript, relations (stored relations or relations defined by rules) abide by the <em>set semantics</em>,
-meaning that even if a rule may compute a row multiple times, it will occur only once in the output.
-This is in contradistinction to SQL.</p>
-<p>There are two types of named rules in CozoScript:
-<em>inline rules</em> distinguished by using <code class="docutils literal notranslate"><span class="pre">:=</span></code> to connect the head and the body,
-and <em>fixed rules</em> distinguished by using <code class="docutils literal notranslate"><span class="pre">&lt;~</span></code> to connect the head and the body.
-You may think that <em>constant rules</em> with <code class="docutils literal notranslate"><span class="pre">&lt;-</span></code> constitute a third type, written as:</p>
+<p>Relations in Cozo (stored or otherwise) abide by the <em>set semantics</em>.
+Thus even if a rule computes a row multiple times,
+the resulting relation only contains a single copy.</p>
+<p>There are two types of named rules in CozoScript:</p>
+<ul class="simple">
+<li><p><em>Inline rules</em>, distinguished by using <code class="docutils literal notranslate"><span class="pre">:=</span></code> to connect the head and the body.
+The logic used to compute the resulting relation is defined <em>inline</em>.</p></li>
+<li><p><em>Fixed rules</em>, distinguished by using <code class="docutils literal notranslate"><span class="pre">&lt;~</span></code> to connect the head and the body.
+The logic used to compute the resulting relation is <em>fixed</em> according to which algorithm or utility is requested.</p></li>
+</ul>
+<p>The <em>constant rules</em> which use <code class="docutils literal notranslate"><span class="pre">&lt;-</span></code> to connect the head and the body are syntax sugar. For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const_rule</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]]</span>
 </pre></div>
 </div>
-<p>but this is merely syntax sugar for the fixed rule of the <code class="docutils literal notranslate"><span class="pre">Constant</span></code> utility:</p>
+<p>is identical to:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const_rule</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">&lt;~</span> <span class="n">Constant</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]])</span>
 </pre></div>
 </div>
@@ -247,169 +247,140 @@ Each row in the named rule is then <em>unified</em> with the bindings given as p
 here the first column is unified with a constant string, and unification succeeds only when the string
 completely matches what is given;
 the second column is unified with the <em>variable</em> <code class="docutils literal notranslate"><span class="pre">b</span></code>,
-and as the variable is fresh at this point (meaning that it first appears here),
-the unification will always succeed and the variable will become <em>bound</em>:
-from this point take on the value of whatever it was
-unified with in the named relation.</p>
-<p>When a bound variable is used again later, for example in <code class="docutils literal notranslate"><span class="pre">rule_b[b,</span> <span class="pre">d,</span> <span class="pre">a,</span> <span class="pre">e]</span></code>, the variable <code class="docutils literal notranslate"><span class="pre">b</span></code> was bound
-at this point, this unification will only succeed when the unified value is the same as the previously unified value.
-In other words, repeated use of the same variable in named rules corresponds to inner joins in relational algebra.</p>
-<p>Another flavour of atoms is the <em>stored relation</em>. It may be written similarly to a rule application:</p>
+and as the variable is fresh at this point (because this is its first appearance),
+the unification will always succeed. For subsequent atoms, the variable becomes <em>bound</em>:
+it take on the value of whatever it was
+unified with in the named relation.
+When a bound variable is unified again, for example <code class="docutils literal notranslate"><span class="pre">b</span></code> in <code class="docutils literal notranslate"><span class="pre">rule_b[b,</span> <span class="pre">d,</span> <span class="pre">a,</span> <span class="pre">e]</span></code>,
+this unification will only succeed when the unified value is the same as the current value.
+Thus, repeated use of the same variable in named rules corresponds to inner joins in relational algebra.</p>
+<p>Atoms representing applications of <em>stored relations</em> are written as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">stored_relation</span><span class="p">[</span><span class="n">bind1</span><span class="p">,</span> <span class="n">bind2</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>with the colon in front of the stored relation name to distinguish it from rule application.
-Written in this way, you must give as many bindings to the stored relation as its arity,
-and the bindings proceed by argument positions, which may be cumbersome and error-prone.
-So alternatively, you may use the fact that columns of a stored relation are always named and bind by name:</p>
+<p>with the asterisk before the name.
+Written in this way using square brackets, as many bindings as the arity of the stored relation must be given.</p>
+<p>You can also bind columns by name:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">stored_relation</span><span class="p">{</span><span class="n">col1</span><span class="p">:</span> <span class="n">bind1</span><span class="p">,</span> <span class="n">col2</span><span class="p">:</span> <span class="n">bind2</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>In this case, you only need to bind as many variables as you use.
-If the name you want to give the binding is the same as the name of the column, you may use the shorthand notation:
-<code class="docutils literal notranslate"><span class="pre">*stored_relation{col1}</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">*stored_relation{col1:</span> <span class="pre">col1}</span></code>.</p>
+<p>In this form, any number of columns may be omitted.
+If the name you want to give the binding is the same as the name of the column, you can write instead
+<code class="docutils literal notranslate"><span class="pre">*stored_relation{col1}</span></code>, which is the same as <code class="docutils literal notranslate"><span class="pre">*stored_relation{col1:</span> <span class="pre">col1}</span></code>.</p>
 <p><em>Expressions</em> are also atoms, such as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p>Here <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> must be bound somewhere else in the rule, and the expression must evaluate to a boolean,
-and act as a <em>filter</em>: only rows where the expression evaluates to true are kept.</p>
-<p>You can also use <em>unification atoms</em> to unify explicitly:</p>
+<p><code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> must be bound somewhere else in the rule. Expression atoms must evaluate to booleans,
+and act as <em>filters</em>. Only rows where the expression atom evaluates to <code class="docutils literal notranslate"><span class="pre">true</span></code> are kept.</p>
+<p><em>Unification atoms</em> unify explicitly:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span>
 </pre></div>
 </div>
-<p>for such atoms,
-whatever appears on the left-hand side must be a single variable and is unified with the right-hand side.
-This is different from the equality operator <code class="docutils literal notranslate"><span class="pre">==</span></code>,
-where both sides are merely required to be expressions.
+<p>Whatever appears on the left-hand side must be a single variable and is unified with the result of the right-hand side.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is different from the equality operator <code class="docutils literal notranslate"><span class="pre">==</span></code>,
+where the left-hand side is a completely bound expression.
 When the left-hand side is a single <em>bound</em> variable,
-it may be shown that the equality and the unification operators are semantically equivalent.</p>
-<p>Another form of <em>unification atom</em> is the explicit multi-unification:</p>
+the equality and the unification operators are equivalent.</p>
+</div>
+<p><em>Unification atoms</em> can also unify with multiple values in a list:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>here the variable on the left-hand side of <code class="docutils literal notranslate"><span class="pre">in</span></code> is unified with each item on the right-hand side in turn,
-which in turn implies that the right-hand side must evaluate to a list
-(but may be represented by a single variable or a function call).</p>
+<p>If the right-hand side does not evaluate to a list, an error is raised.</p>
 </section>
-<section id="head-and-returned-relation">
-<h3>Head and returned relation<a class="headerlink" href="#head-and-returned-relation" title="Permalink to this heading">#</a></h3>
-<p>Atoms, as explained above, corresponds to either relations (or their projections) or filters in relational algebra.
-Linked by commas, they, therefore, represent a joined relation, with named columns.
+<section id="head">
+<h3>Head<a class="headerlink" href="#head" title="Permalink to this heading">#</a></h3>
+<p>As explained above, Atoms correspond to either relations, projections or filters in relational algebra.
+Linked by commas, they therefore represent a joined relation, with columns either constants or variables.
 The <em>head</em> of the rule, which in the simplest case is just a list of variables,
-then defines whichever columns to keep, and their order in the output relation.</p>
-<p>Each variable in the head must be bound in the body, this is one of the <em>safety rules</em> of Datalog.
+then defines the columns to keep in the output relation and their order.</p>
+<p>Each variable in the head must be bound in the body (the <em>safety rule</em>).
 Not all variables appearing in the body need to appear in the head.</p>
 </section>
 <section id="multiple-definitions-and-disjunction">
 <h3>Multiple definitions and disjunction<a class="headerlink" href="#multiple-definitions-and-disjunction" title="Permalink to this heading">#</a></h3>
 <p>For inline rules only, multiple rule definitions may share the same name,
 with the requirement that the arity of the head in each definition must match.
-The returned relation is then the <em>disjunction</em> of the multiple definitions,
-which correspond to <em>union</em> in SQL.
-<em>Intersect</em> in SQL can be written in CozoScript into a single rule since commas denote conjunction.
-In complicated situations, you may instead write disjunctions in a single rule with the explicit <code class="docutils literal notranslate"><span class="pre">or</span></code> operator:</p>
+The returned relation is then formed by the <em>disjunction</em> of the multiple definitions (a <em>union</em> of rows).</p>
+<p>You may also use the explicit disjunction operator <code class="docutils literal notranslate"><span class="pre">or</span></code> in a single rule definition:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rule1</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span> <span class="o">:=</span> <span class="n">rule2</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">or</span> <span class="n">rule3</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">rule4</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>For completeness, there is also an explicit <code class="docutils literal notranslate"><span class="pre">and</span></code> operator, but it is semantically identical to the comma,
-except that
-it has higher operator precedence than <code class="docutils literal notranslate"><span class="pre">or</span></code>, which in turn has higher operator precedence than the comma.</p>
-<p>During evaluation, each rule is canonicalized into
-<a class="reference external" href="https://en.wikipedia.org/wiki/Disjunctive_normal_form">disjunction normal form</a>
-and each clause of the outmost disjunction is treated as a separate rule.
-The consequence is that the safety rule may be violated
-even though textually every variable in the head occurs in the body.
-As an example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span> <span class="o">:=</span> <span class="n">rule1</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">or</span> <span class="n">rule2</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>is a violation of the safety rule since it is rewritten into two rules, each of which is missing a different binding.</p>
+<p>There is also an <code class="docutils literal notranslate"><span class="pre">and</span></code> operator, semantically identical to the comma <code class="docutils literal notranslate"><span class="pre">,</span></code>
+but has higher operator precedence than <code class="docutils literal notranslate"><span class="pre">or</span></code> (the comma has the lowest precedence).</p>
 </section>
 <section id="negation">
 <h3>Negation<a class="headerlink" href="#negation" title="Permalink to this heading">#</a></h3>
-<p>Atoms in inline rules may be <em>negated</em> by putting <code class="docutils literal notranslate"><span class="pre">not</span></code> in front of them, as in:</p>
+<p>Atoms in inline rules may be <em>negated</em> by putting <code class="docutils literal notranslate"><span class="pre">not</span></code> in front of them:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ow">not</span> <span class="n">rule1</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>When negating rule applications and stored relations,
-at least one binding must be bound somewhere else in the rule in a non-negated context:
-this is another safety rule of Datalog, and it ensures that the outputs of rules are always finite.
-The unbound bindings in negated rules remain unbound: negation cannot introduce bound bindings to be used in the head.</p>
+at least one binding must be bound somewhere else in the rule in a non-negated context (another <em>safety rule</em>).
+The unbound bindings in negated rules remain unbound: negation cannot introduce new bindings to be used in the head.</p>
 <p>Negated expressions act as negative filters,
 which is semantically equivalent to putting <code class="docutils literal notranslate"><span class="pre">!</span></code> in front of the expression.
-Since negation does not introduce new bindings,
-unifications and multi-unifications are converted to equivalent expressions and then negated.</p>
+Explict unification cannot be negated unless the left-hand side is bound,
+in which case it is treated as an expression atom and then negated.</p>
 </section>
 <section id="recursion-and-stratification">
 <h3>Recursion and stratification<a class="headerlink" href="#recursion-and-stratification" title="Permalink to this heading">#</a></h3>
 <p>The body of an inline rule may contain rule applications of itself,
 and multiple inline rules may apply each other recursively.
-The only exception is the entry rule <code class="docutils literal notranslate"><span class="pre">?</span></code>, which cannot be referred to by other rules.</p>
-<p>Self and mutual references allow recursion to be defined easily. To guard against semantically pathological cases,
-recursion cannot occur in negated positions: the Russell-style rule <code class="docutils literal notranslate"><span class="pre">r[a]</span> <span class="pre">:=</span> <span class="pre">not</span> <span class="pre">r[a]</span></code> is not allowed.
-This requirement creates an ordering of the rules, since
-negated rules must evaluate to completion before rules that apply them can start evaluation:
-this is called <em>stratification</em> of the rules.
-In cases where a total ordering cannot be defined since there exists a loop in the ordering
-required by negation, the query is then deemed unstratifiable and Cozo will refuse to execute it.</p>
-<p>Note that since CozoScript allows unifying fresh variables, you can still easily write programs that produce
-infinite relations and hence cannot complete through recursion, but that are still accepted by the database.
+The only exception is the entry rule <code class="docutils literal notranslate"><span class="pre">?</span></code>, which cannot be referred to by other rules including itself.</p>
+<p>Recursion cannot occur in negated positions (<em>safety rule</em>): <code class="docutils literal notranslate"><span class="pre">r[a]</span> <span class="pre">:=</span> <span class="pre">not</span> <span class="pre">r[a]</span></code> is not allowed.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>As CozoScript allows explicit unification,
+queries that produce infinite relations may be accepted by the compiler.
 One of the simplest examples is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>r[a] := a = 0
 r[a] := r[b], a = b + 1
 ?[a] := r[a]
 </pre></div>
 </div>
-<p>It is up to the user to ensure that such programs are not submitted to the database,
-as it is not even in principle possible for the database to rule out such cases without wrongly rejecting valid queries.
-If you accidentally submitted one, you can refer to the system ops section for how to terminate long-running queries.
-Or you can give a timeout for the query when you submit.</p>
+<p>It is not even in principle possible for Cozo to rule out all infinite queries without wrongly rejecting valid ones.
+If you accidentally submitted one, refer to the system ops chapter for how to terminate queries.
+Alternatively, you can give a timeout for the query when you submit.</p>
+</div>
 </section>
 <section id="aggregation">
 <h3>Aggregation<a class="headerlink" href="#aggregation" title="Permalink to this heading">#</a></h3>
-<p>CozoScript supports aggregations, as does SQL, which provides a very useful extension to pure relational algebra.
-In CozoScript, aggregations are specified for inline rules by applying aggregation operators to variables
-in the rule head, as in:</p>
+<p>In CozoScript, aggregations are specified for inline rules by applying <em>aggregation operators</em> to variables
+in the rule head:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[department, count(employee)] := *personnel{department, employee}
 </pre></div>
 </div>
-<p>here we have used the <code class="docutils literal notranslate"><span class="pre">count</span></code> operator familiar to all SQL users.
-The semantics is that any variables in the head without aggregation operators are treated as <em>grouping variables</em>,
-similar to what appears in a <code class="docutils literal notranslate"><span class="pre">GROUP</span> <span class="pre">BY</span></code> clause in SQL, and the aggregation is applied using the grouping variables
-as keys. If you do not specify any grouping variables, then you get at most one row as the return value.</p>
-<p>As we now understand, CozoScript follows relational algebra with set semantics.
-With the introduction of aggregations, the situation is a little bit more complicated,
-as aggregations are applied to the relation resulting from the body of the rule using bag semantics,
-and the resulting relation of the rule, after aggregations are applied, follows set semantics.
+<p>here we have used the familiar <code class="docutils literal notranslate"><span class="pre">count</span></code> operator.
+Any variables in the head without aggregation operators are treated as <em>grouping variables</em>,
+and aggregation is applied using them as keys.
+If you do not specify any grouping variables, then the resulting relation contains at most one row.</p>
+<p>Aggregation operators are applied to the rows computed by the body of the rule using bag semantics.
 The reason for this complication is that if aggregations are applied with set semantics, then the following query:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[count(employee)] := *personnel{employee}
 </pre></div>
 </div>
 <p>does not do what you expect: it either returns a row with a single value <code class="docutils literal notranslate"><span class="pre">1</span></code> if there are any matching rows,
-or it returns nothing at all if the stored relation <code class="docutils literal notranslate"><span class="pre">*personnel</span></code> is empty.
-Though semantically sound, this behaviour is not useful at all.
-So for aggregations, we opt for bag semantics, and the query does what one expects.</p>
-<p>If a rule has several definitions, they must have identical aggregations applied in the same positions,
-otherwise, the query will be rejected.
-The reason is that in complicated situations the semantics is ambiguous and counter-intuitive if we do allow it.</p>
-<p>Existing database systems do not usually allow aggregations through recursion,
-since in many cases, it is difficult to give useful semantics to such queries.
-In CozoScript we allow aggregations for self-recursion for a limited subset of aggregation operators,
-the so-called <em>semi-lattice aggregations</em>, such as the following example shows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>shortest_distance[destination, min(distance)] := route{source: &#39;A&#39;, destination, distance}
+or it returns nothing at all if the stored relation is empty.</p>
+<p>If a rule has several definitions, they must have identical aggregations applied in the same positions.</p>
+<p>Cozo allows aggregations for self-recursion for a limited subset of aggregation operators,
+the so-called <em>semi-lattice aggregations</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>shortest_distance[destination, min(distance)] :=
+    route{source: &#39;A&#39;, destination, distance}
+
 shortest_distance[destination, min(distance)] :=
     shortest_distance[existing_node, prev_distance], # recursion
     route{source: existing_node, distance: route_distance},
     distance = prev_distance + route_distance
-?[destination, min_distance] := shortest_distance[destination, min_distance]
+
+?[destination, min_distance] :=
+    shortest_distance[destination, min_distance]
 </pre></div>
 </div>
-<p>this query computes the shortest distances from a node to all nodes using the <code class="docutils literal notranslate"><span class="pre">min</span></code> aggregation operator.</p>
-<p>Concerning stratification, if a rule has aggregations in its head,
-then any rule that contains it in an atom must be in a higher stratum,
-unless that rule is the same rule (self-recursion) and all aggregations in its head are semi-lattice aggregations.</p>
-<p>Consult the dedicated chapter for the aggregation operators available.</p>
+<p>Here self-recursion of <code class="docutils literal notranslate"><span class="pre">shortest_distance</span></code> contains the <code class="docutils literal notranslate"><span class="pre">min</span></code> aggregation.</p>
 </section>
 </section>
 <section id="fixed-rules">
@@ -417,49 +388,39 @@ unless that rule is the same rule (self-recursion) and all aggregations in its h
 <p>The body of a fixed rule starts with the name of the utility or algorithm being applied,
 then takes a specified number of named or stored relations as its <em>input relations</em>,
 followed by <em>options</em> that you provide.
-The following query is a calculation of PageRank:</p>
+For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[] &lt;~ PageRank(*route[], theta: 0.5)
 </pre></div>
 </div>
 <p>In the above example, the relation <code class="docutils literal notranslate"><span class="pre">*route</span></code> is the single input relation expected.
-Input relations may be stored relations or relations resulting from rules.
-Each utility/algorithm expects specific shapes of input relations,
-for example, PageRank expects the first two columns of the relation to denote the source and destination
-of links in a graph. You must consult the documentation for each utility/algorithm to understand its API.
-In fixed rules, bindings for input relations are usually omitted, but sometimes if they are provided
-they are interpreted and used in case-specific ways, for example in the DFS algorithm bindings
-can be used to construct an expression for testing the termination condition.
-In the example given above, <code class="docutils literal notranslate"><span class="pre">theta</span></code> is an option of the algorithm,
+Input relations may be stored relations or relations resulting from rules.</p>
+<p>Each utility/algorithm expects specific shapes for their input relations.
+You must consult the documentation for each utility/algorithm to understand its API.</p>
+<p>In fixed rules, bindings for input relations are usually omitted, but sometimes if they are provided
+they are interpreted and used in algorithm-specific ways, for example in the DFS algorithm bindings.</p>
+<p>In the example above, <code class="docutils literal notranslate"><span class="pre">theta</span></code> is an option of the algorithm,
 which is required by the API to be an expression evaluating to a constant.
 Each utility/algorithm expects specific types for the options;
 some options have default values and may be omitted.</p>
-<p>Each fixed rule has a determinate output arity,
-deduced from the specific utility/algorithm being applied and the options given.
-Usually, you omit the bindings in the rule head, as we do above,
-but if you do provide bindings, the arities must match.</p>
-<p>In terms of stratification, each fixed rule lives in its own stratum:
-it is evaluated after all rules it depends on are completely evaluated,
-and all rules depending on the output relation of a fiex rule start evaluation only after complete evaluation
-of the fixed rule.
-In particular, unlike inline rules, there is no early termination even if the output relation
-is for the entry rule.</p>
+<p>Each fixed rule has a determinate output arity.
+Thus, the bindings in the rule head can be omitted,
+but if they are provided, you must abide by the arity.</p>
 </section>
 <section id="query-options">
 <h2>Query options<a class="headerlink" href="#query-options" title="Permalink to this heading">#</a></h2>
-<p>Each query can have query options associated with it:</p>
+<p>Each query can have options associated with it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>?[name] := *personnel{name}
 
 :limit 10
 :offset 20
 </pre></div>
 </div>
-<p>In the example, <code class="docutils literal notranslate"><span class="pre">:limit</span></code> and <code class="docutils literal notranslate"><span class="pre">:offset</span></code> are query options, with familiar meanings from SQL.
+<p>In the example, <code class="docutils literal notranslate"><span class="pre">:limit</span></code> and <code class="docutils literal notranslate"><span class="pre">:offset</span></code> are query options with familiar meanings.
 All query options start with a single colon <code class="docutils literal notranslate"><span class="pre">:</span></code>.
-Queries options can appear before or after rules, or even sandwiched between rules.
-Use this freedom for better readability.</p>
+Queries options can appear before or after rules, or even sandwiched between rules.</p>
 <p>Several query options deal with transactions for the database.
 Those will be discussed in the chapter on stored relations and transactions.
-Here we explain query options that exclusively affect the query itself.</p>
+The rest of the query options are explained in the following.</p>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">:limit</span> <span class="pre">&lt;N&gt;</span></span></dt>
@@ -486,35 +447,45 @@ Seconds may be specified as an expression so that random timeouts are possible.<
 <dd><p>If specified, the query will wait for <code class="docutils literal notranslate"><span class="pre">&lt;N&gt;</span></code> seconds after completion,
 before committing or proceeding to the next query.
 Seconds may be specified as an expression so that random timeouts are possible.
-This is useful for deliberately interleaving concurrent queries to test for complex logic.</p>
+Useful for deliberately interleaving concurrent queries to test complex logic.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">:sort</span> <span class="pre">&lt;SORT_ARG&gt;</span> <span class="pre">(,</span> <span class="pre">&lt;SORT_ARG&gt;)*</span></span></dt>
-<dd><p>Sort the output relation before applying other options or returning.
+<dd><p>Sort the output relation. If <code class="docutils literal notranslate"><span class="pre">:limit</span></code> or <code class="docutils literal notranslate"><span class="pre">:offset</span></code> are specified, they are applied after <code class="docutils literal notranslate"><span class="pre">:sort</span></code>.
 Specify <code class="docutils literal notranslate"><span class="pre">&lt;SORT_ARG&gt;</span></code> as they appear in the rule head of the entry, separated by commas.
 You can optionally specify the sort direction of each argument by prefixing them with <code class="docutils literal notranslate"><span class="pre">+</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code>,
-with minus denoting descending sort. As an example, <code class="docutils literal notranslate"><span class="pre">:sort</span> <span class="pre">-count(employee),</span> <span class="pre">dept_name</span></code>
-sorts by employee count descendingly first, then break ties with department name in ascending alphabetical order.
-Note that your entry rule head must contain both <code class="docutils literal notranslate"><span class="pre">dept_name</span></code> and <code class="docutils literal notranslate"><span class="pre">count(employee)</span></code>:
-aggregations must be done in inline rules, not in output sorting.  <code class="docutils literal notranslate"><span class="pre">:order</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">:sort</span></code>.</p>
+with minus denoting descending order, e.g. <code class="docutils literal notranslate"><span class="pre">:sort</span> <span class="pre">-count(employee),</span> <span class="pre">dept_name</span></code>
+sorts by employee count in reverse order first,
+then break ties with department name in ascending alphabetical order.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Aggregations must be done in inline rules, not in output sorting. In the above example,
+the entry rule head must contain <code class="docutils literal notranslate"><span class="pre">count(employee)</span></code>, <code class="docutils literal notranslate"><span class="pre">employee</span></code> alone is not acceptable.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">:order</span> <span class="pre">&lt;SORT_ARG&gt;</span> <span class="pre">(,</span> <span class="pre">&lt;SORT_ARG&gt;)*</span></span></dt>
+<dd><p>Alias for <code class="docutils literal notranslate"><span class="pre">:sort</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">:assert</span> <span class="pre">none</span></span></dt>
-<dd><p>With this option, the query returns nothing if the output relation is empty, otherwise execution aborts with an error.
-Essential for transactions and triggers.</p>
+<dd><p>The query returns nothing if the output relation is empty, otherwise execution aborts with an error.
+Useful for transactions and triggers.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">:assert</span> <span class="pre">some</span></span></dt>
-<dd><p>With this option, the query returns nothing if the output relation contains at least one row,
+<dd><p>The query returns nothing if the output relation contains at least one row,
 otherwise, execution aborts with an error.
 Execution of the query stops as soon as the first row is produced if possible.
-Essential for transactions and triggers.</p>
+Useful for transactions and triggers.</p>
 </dd></dl>
 
 </section>
@@ -580,7 +551,7 @@ Essential for transactions and triggers.</p>
 <li><a class="reference internal" href="#">Queries</a><ul>
 <li><a class="reference internal" href="#inline-rules">Inline rules</a><ul>
 <li><a class="reference internal" href="#atoms">Atoms</a></li>
-<li><a class="reference internal" href="#head-and-returned-relation">Head and returned relation</a></li>
+<li><a class="reference internal" href="#head">Head</a></li>
 <li><a class="reference internal" href="#multiple-definitions-and-disjunction">Multiple definitions and disjunction</a></li>
 <li><a class="reference internal" href="#negation">Negation</a></li>
 <li><a class="reference internal" href="#recursion-and-stratification">Recursion and stratification</a></li>

@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Functions" href="functions.html" /><link rel="prev" title="Datatypes" href="datatypes.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Functions" href="functions.html" /><link rel="prev" title="Types" href="datatypes.html" />
         <link rel="canonical" href="/manual/execution.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
@@ -161,7 +161,7 @@
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Datatypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Types</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
@@ -201,52 +201,56 @@
         <article role="main">
           <section id="query-execution">
 <h1>Query execution<a class="headerlink" href="#query-execution" title="Permalink to this heading">#</a></h1>
-<p>Usually, in a database,
-how queries are executed is usually considered an implementation detail
-hidden behind an abstraction barrier, which normal users need not care about.
-The idea is that databases will take advantage of this abstraction barrier
-by using query optimizers to choose the best query plan,
+<p>Databases often consider how queries are executed an implementation detail
+hidden behind an abstraction barrier that users need not care about,
+so that databases can utilize query optimizers to choose the best query execution plan
 regardless of how the query was originally written.
-As everyone knows, however, this abstraction barrier is leaky,
-since bad query execution plans invariably occur and hurt performance.
-The problem is especially severe when dealing with graphs,
-since graph traversals generally use a lot more joins than non-graph queries,
-and the reliability of even the best query optimizer
-decreases exponentially with the number of joins.</p>
-<p>In Cozo we take the pragmatic approach and assume that the user eventually
-knows (or should know) what is the best way to query their data.
-This is certainly true for those developers who spend hours
-“coercing” the query optimizers to use a query plan that the user intends,
-sometimes in rather convoluted ways.
-In Cozo, no coercion is necessary since the query execution is completely
-determined by how the query is written:
-there is no stats-based query planning involved.
-In our experience, this saves quite a lot of developer time,
-since developers eventually learn how to write efficient queries naturally,
-and after they do, they no longer have to deal with endless “query de-optimizations”.</p>
+This abstraction barrier is leaky, however,
+since bad query execution plans invariably occur,
+and users need to “reach behind the curtain” to fix performance problems,
+which is a difficult and tiring task.
+The problem becomes more severe the more joins a query contains,
+and graph queries tend to contain a large number of joins.</p>
+<p>So in Cozo we take the pragmatic approach and make query execution deterministic
+and easy to tell from how the query was written.
+The flip side is that we demand the user to
+know what is the best way to store their data,
+which is in general less demanding than coercing the query optimizer.
+Then, armed with knowledge of this chapter, writing efficient queries is easy.</p>
+<section id="disjunctive-normal-form">
+<h2>Disjunctive normal form<a class="headerlink" href="#disjunctive-normal-form" title="Permalink to this heading">#</a></h2>
+<p>Evaluation starts by canonicalizing inline rules into
+<a class="reference external" href="https://en.wikipedia.org/wiki/Disjunctive_normal_form">disjunction normal form</a>,
+i.e., a disjunction of conjunctions, with any negation pushed to the innermost level.
+Each clause of the outmost disjunction is then treated as a separate rule.
+The consequence is that the safety rule may be violated
+even though textually every variable in the head occurs in the body.
+As an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span> <span class="o">:=</span> <span class="n">rule1</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">or</span> <span class="n">rule2</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>is a violation of the safety rule since it is rewritten into two rules, each of which is missing a different binding.</p>
+</section>
 <section id="stratification">
 <h2>Stratification<a class="headerlink" href="#stratification" title="Permalink to this heading">#</a></h2>
-<p>As discussed in the chapter on queries, Cozo sees a query as a set of named rules.
-Fixed rules are left as they are,
-and inline rules are converted into disjunctive normal forms.
-After conversion, all inline rules consist of conjunction of atoms only,
-and negation only occurs for the leaf atoms.</p>
-<p>The next step towards executing the query is <em>stratifying</em> the rules.
-Stratification begins by making a graph of the named rules,
+<p>The next step in the processing is <em>stratification</em>.
+It begins by making a graph of the named rules,
 with the rules themselves as nodes,
 and a link is added between two nodes when one of the rules applies the other.
-This application is through atoms for inline rules, and input relations for fixed rules.
-Now some of the links are labelled <em>stratifying</em>:
-when an inline rule applies another rule through negation,
-when an inline rule applies another inline rule that contains aggregations,
-when an inline rule applies itself and it has non-semi-lattice,
-when an inline rule applies another rule which is a fixed rule,
-or when a fixed rule has another rule as an input relation.
-The strongly connected components of this graph are then determined and tested,
+This application is through atoms for inline rules, and input relations for fixed rules.</p>
+<p>Next, some of the links are labelled <em>stratifying</em>:</p>
+<ul class="simple">
+<li><p>when an inline rule applies another rule through negation,</p></li>
+<li><p>when an inline rule applies another inline rule that contains aggregations,</p></li>
+<li><p>when an inline rule applies itself and it has non-semi-lattice,</p></li>
+<li><p>when an inline rule applies another rule which is a fixed rule,</p></li>
+<li><p>when a fixed rule has another rule as an input relation.</p></li>
+</ul>
+<p>The strongly connected components of the graph of rules are then determined and tested,
 and if it found that some strongly connected component contains a stratifying link,
 the graph is deemed <em>unstratifiable</em>, and the execution aborts.
 Otherwise, Cozo will topologically sort the strongly connected components to
-determine a <em>stratification</em> of the rules:
+determine the strata of the rules:
 rules within the same stratum are logically executed together,
 and no two rules within the same stratum can have a stratifying link between them.
 In this process,
@@ -257,9 +261,9 @@ The resulting strata are then passed on to be processed in the next step.</p>
 </section>
 <section id="magic-set-rewrites">
 <h2>Magic set rewrites<a class="headerlink" href="#magic-set-rewrites" title="Permalink to this heading">#</a></h2>
-<p>Within each stratum, the input rules are rewritten using a technique called magic sets.
-In intuitive terms, this rewriting is to ensure that the query execution does not
-waste time calculating results that are then simply discarded.
+<p>Within each stratum, the input rules are rewritten using the technique of <em>magic sets</em>.
+This rewriting ensures that the query execution does not
+waste time calculating results that are later simply discarded.
 As an example, consider:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>reachable[a, b] := link[a, n]
 reachable[a, b] := reachable[a, c], link[c, b]
@@ -268,33 +272,35 @@ reachable[a, b] := reachable[a, c], link[c, b]
 </div>
 <p>Without magic set rewrites, the whole <code class="docutils literal notranslate"><span class="pre">reachable</span></code> relation is generated first,
 then most of them are thrown away, keeping only those starting from <code class="docutils literal notranslate"><span class="pre">'A'</span></code>.
-Magic set avoids this problem. How the rewrite proceeds is rather technical,
-but you can see the results in the output of <code class="docutils literal notranslate"><span class="pre">::explain</span></code>.</p>
-<p>The rewritten query is guaranteed to yield the same relation for <code class="docutils literal notranslate"><span class="pre">?</span></code>,
+Magic set rewriting avoids this problem.
+You can see the result of the rewriting using <code class="docutils literal notranslate"><span class="pre">::explain</span></code>.
+The rewritten query is guaranteed to yield the same relation for <code class="docutils literal notranslate"><span class="pre">?</span></code>,
 and will in general yield fewer intermediate rows.</p>
-<p>Currently, the rewrite applies only to inline rules without aggregations.
-So for the moment being, you may need to manually constrain some of your rules.</p>
+<p>The rewrite currently only applies to inline rules without aggregations.</p>
 </section>
 <section id="semi-naive-evaluation">
 <h2>Semi-naïve evaluation<a class="headerlink" href="#semi-naive-evaluation" title="Permalink to this heading">#</a></h2>
 <p>Now each stratum contains either a single fixed rule or a set of inline rules.
-The single fixed rule case is easy: just run the specific implementation of the rule.
-In the case of the inline rules, each of the rules is assigned an output relation.
+The single fixed rules are executed by running their specific implementations.
+For the inline rules, each of them is assigned an output relation.
 Assuming we know how to evaluate each rule given all the relations it depends on,
 the semi-naïve algorithm can now be applied to the rules to yield all output rows.</p>
 <p>The semi-naïve algorithm is a bottom-up evaluation strategy, meaning that it tries to deduce
-all facts from a set of given facts.
-By contrast, top-down strategies start with stated goals and try to find proof for the goals.
+all facts from a set of given facts.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By contrast, top-down strategies start with stated goals and try to find proof for the goals.
 Bottom-up strategies have many advantages over top-down ones when the whole output of each rule
 is needed, but may waste time generating unused facts if only some of the output is kept.
 Magic set rewrites are introduced to eliminate precisely this weakness.</p>
+</div>
 </section>
 <section id="ordering-of-atoms">
 <h2>Ordering of atoms<a class="headerlink" href="#ordering-of-atoms" title="Permalink to this heading">#</a></h2>
-<p>Now we discuss how a single definition of an inline rule is evaluated.
-We know from the query chapter that the body of the rule contains atoms,
-and after conversion to disjunctive normal forms, all atoms are linked by conjunction,
-and each atom can only be one of the following:</p>
+<p>The compiler reorders the atoms in the body of the inline rules, and then
+the atoms are evaluated.</p>
+<p>After conversion to disjunctive normal forms,
+each atom can only be one of the following:</p>
 <ul class="simple">
 <li><p>an explicit unification,</p></li>
 <li><p>applying a rule or a stored relation,</p></li>
@@ -302,52 +308,50 @@ and each atom can only be one of the following:</p>
 <li><p>a negation of an application.</p></li>
 </ul>
 <p>The first two cases may introduce fresh bindings, whereas the last two cannot.
-The atoms are then reordered: all atoms that introduce new bindings stay where they are,
+The reordering make all atoms that introduce new bindings stay where they are,
 whereas all atoms that do not introduce new bindings are moved to the earliest possible place
-where all their bindings are bound. In fact,
-all atoms that introduce bindings correspond to
+where all their bindings are bound.
+All atoms that introduce bindings correspond to
 joining with a pre-existing relation followed by projections
 in relational algebra, and all atoms that do not correspond to filters.
-The idea is to apply filters as early as possible
-to minimize the number of rows before joining with the next relation.</p>
-<p>This procedure is completely deterministic.
-When writing the body of rules, we therefore should aim to minimize the total number of rows generated.
-A strategy that works almost in all cases is to put the most restrictive atoms which generate new bindings first,
-as this can make the left relation in each join small.</p>
+By applying filters as early as possible,
+we minimize the number of rows before joining them with the next relation.</p>
+<p>When writing the body of rules, we should aim to minimize the total number of rows generated.
+A strategy that works almost in all cases is to put the most restrictive atoms which generate new bindings first.</p>
 </section>
-<section id="relations-as-indices">
-<h2>Relations as indices<a class="headerlink" href="#relations-as-indices" title="Permalink to this heading">#</a></h2>
-<p>Next, we need to understand how a single atom which generates new bindings is processed.</p>
-<p>For the case of unification, it is simple: the right-hand side of the unification,
-which is an expression with all variables bound, is simply evaluated, and the result is joined
+<section id="evaluating-atoms">
+<h2>Evaluating atoms<a class="headerlink" href="#evaluating-atoms" title="Permalink to this heading">#</a></h2>
+<p>We now explain how a single atom which generates new bindings is processed.</p>
+<p>For unifications, the right-hand side, an expression with all variables bound,
+is simply evaluated, and the result is joined
 to the current relation (as in a <code class="docutils literal notranslate"><span class="pre">map-cat</span></code> operation in functional languages).</p>
-<p>For the case of the application of relations,
-the first thing to understand is that all relations in Cozo are conceptually trees.
-All the bindings of relations generated by inline or fixed rules,
-and the keys of stored relations, act as a composite key for the tree.
-The access complexity is therefore determined by whether a key component is bound.
+<p>Rules or stored relations are conceptually trees, with composite keys sorted lexicographically.
+The complexity of their applications in atoms
+is therefore determined by whether the bound variables and constants in the application bindings form a <em>key prefix</em>.
 For example, the following application:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a_rule</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>with <code class="docutils literal notranslate"><span class="pre">c</span></code> unbound is very efficient, since this corresponds to a prefix scan in the tree with the key prefix <code class="docutils literal notranslate"><span class="pre">['A',</span> <span class="pre">'B']</span></code>,
+<p>with <code class="docutils literal notranslate"><span class="pre">c</span></code> unbound, is very efficient, since this corresponds to a prefix scan in the tree with the key prefix <code class="docutils literal notranslate"><span class="pre">['A',</span> <span class="pre">'B']</span></code>,
 whereas the following application:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a_rule</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>where <code class="docutils literal notranslate"><span class="pre">a</span></code> is unbound is very expensive, since we must do a full relation scan.
-On the other hand, if <code class="docutils literal notranslate"><span class="pre">a</span></code> is bound, then this is only a logarithmic-time check.</p>
+<p>where <code class="docutils literal notranslate"><span class="pre">a</span></code> is unbound, is very expensive, since we must do a full scan.
+On the other hand, if <code class="docutils literal notranslate"><span class="pre">a</span></code> is bound, then this is only a logarithmic-time existence check.</p>
 <p>For stored relations, you need to check its schema for the order of keys to deduce the complexity.
 The system op <code class="docutils literal notranslate"><span class="pre">::explain</span></code> may also give you some information.</p>
+<p>Rows are generated in a streaming fashion,
+meaning that relation joins proceed as soon as one row is available,
+and do not wait until the whole relation is generated.</p>
 </section>
 <section id="early-stopping">
 <h2>Early stopping<a class="headerlink" href="#early-stopping" title="Permalink to this heading">#</a></h2>
-<p>Within each stratum, rows are generated in a streaming fashion.
-For the entry rule <code class="docutils literal notranslate"><span class="pre">?</span></code>, if <code class="docutils literal notranslate"><span class="pre">:limit</span></code> is specified as a query option,
+<p>For the entry rule <code class="docutils literal notranslate"><span class="pre">?</span></code>, if <code class="docutils literal notranslate"><span class="pre">:limit</span></code> is specified as a query option,
 a counter is used to monitor how many valid rows are already generated.
 If enough rows are generated, the query stops.
-Note that this only works when the entry rule is inline,
-and when you are <em>not</em> specifying <code class="docutils literal notranslate"><span class="pre">:order</span></code>.</p>
+This only works when the entry rule is inline
+and you do not specify <code class="docutils literal notranslate"><span class="pre">:order</span></code>.</p>
 </section>
 </section>
 
@@ -372,7 +376,7 @@ and when you are <em>not</em> specifying <code class="docutils literal notransla
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Datatypes</div>
+                <div class="title">Types</div>
                 
               </div>
             </a>
@@ -409,11 +413,12 @@ and when you are <em>not</em> specifying <code class="docutils literal notransla
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Query execution</a><ul>
+<li><a class="reference internal" href="#disjunctive-normal-form">Disjunctive normal form</a></li>
 <li><a class="reference internal" href="#stratification">Stratification</a></li>
 <li><a class="reference internal" href="#magic-set-rewrites">Magic set rewrites</a></li>
 <li><a class="reference internal" href="#semi-naive-evaluation">Semi-naïve evaluation</a></li>
 <li><a class="reference internal" href="#ordering-of-atoms">Ordering of atoms</a></li>
-<li><a class="reference internal" href="#relations-as-indices">Relations as indices</a></li>
+<li><a class="reference internal" href="#evaluating-atoms">Evaluating atoms</a></li>
 <li><a class="reference internal" href="#early-stopping">Early stopping</a></li>
 </ul>
 </li>

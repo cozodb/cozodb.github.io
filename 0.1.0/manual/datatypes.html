@@ -7,7 +7,7 @@
         <link rel="canonical" href="/manual/datatypes.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
-        <title>Datatypes - Cozo Manual</title>
+        <title>Types - Cozo Manual</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -161,7 +161,7 @@
 <li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Datatypes</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
@@ -199,11 +199,11 @@
           </label>
         </div>
         <article role="main">
-          <section id="datatypes">
-<h1>Datatypes<a class="headerlink" href="#datatypes" title="Permalink to this heading">#</a></h1>
-<section id="value-types">
-<h2>Value types<a class="headerlink" href="#value-types" title="Permalink to this heading">#</a></h2>
-<p>A runtime value in Cozo can be of the following <em>value-types</em>:</p>
+          <section id="types">
+<h1>Types<a class="headerlink" href="#types" title="Permalink to this heading">#</a></h1>
+<section id="runtime-types">
+<h2>Runtime types<a class="headerlink" href="#runtime-types" title="Permalink to this heading">#</a></h2>
+<p>Values in Cozo have the following <em>runtime types</em>:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Null</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Bool</span></code></p></li>
@@ -216,48 +216,53 @@
 <p><code class="docutils literal notranslate"><span class="pre">Number</span></code> can be <code class="docutils literal notranslate"><span class="pre">Float</span></code> (double precision) or <code class="docutils literal notranslate"><span class="pre">Int</span></code> (signed, 64 bits). Cozo will auto-promote <code class="docutils literal notranslate"><span class="pre">Int</span></code> to <code class="docutils literal notranslate"><span class="pre">Float</span></code> when necessary.</p>
 <p><code class="docutils literal notranslate"><span class="pre">List</span></code> can contain any number of mixed-type values, including other lists.</p>
 <p>Cozo sorts values according to the above order, e.g. <code class="docutils literal notranslate"><span class="pre">null</span></code> is smaller than <code class="docutils literal notranslate"><span class="pre">true</span></code>, which is in turn smaller than the list <code class="docutils literal notranslate"><span class="pre">[]</span></code>.</p>
-<p>Within each type values are <em>compared</em> according to logic custom to each type:</p>
+<p>Within each type values are <em>compared</em> according to:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">false</span> <span class="pre">&lt;</span> <span class="pre">true</span></code>;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">-1</span> <span class="pre">==</span> <span class="pre">-1.0</span> <span class="pre">&lt;</span> <span class="pre">0</span> <span class="pre">==</span> <span class="pre">0.0</span> <span class="pre">&lt;</span> <span class="pre">0.5</span> <span class="pre">==</span> <span class="pre">0.5</span> <span class="pre">&lt;</span> <span class="pre">1</span> <span class="pre">==</span> <span class="pre">1.0</span></code> (however, see the caveat below);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-1</span> <span class="pre">==</span> <span class="pre">-1.0</span> <span class="pre">&lt;</span> <span class="pre">0</span> <span class="pre">==</span> <span class="pre">0.0</span> <span class="pre">&lt;</span> <span class="pre">0.5</span> <span class="pre">==</span> <span class="pre">0.5</span> <span class="pre">&lt;</span> <span class="pre">1</span> <span class="pre">==</span> <span class="pre">1.0</span></code>;</p></li>
 <li><p>Lists are ordered lexicographically by their elements;</p></li>
 <li><p>Bytes are compared lexicographically;</p></li>
-<li><p>Strings are ordered lexicographically by their UTF-8 byte representations.</p></li>
-<li><p>UUIDs are sorted in a way that UUIDv1 with similar timestamps are near each other. This is to improve data locality and should be considered an implementation detail. Depending on the order of UUID in your application is not recommended.</p></li>
+<li><p>Strings are compared lexicographically by their UTF-8 byte representations;</p></li>
+<li><p>UUIDs are sorted in a way that UUIDv1 with similar timestamps are near each other.
+This is to improve data locality and should be considered an implementation detail.
+Depending on the order of UUID in your application is not recommended.</p></li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Because there are two internal number types <code class="docutils literal notranslate"><span class="pre">Int</span></code> and <code class="docutils literal notranslate"><span class="pre">Float</span></code> under the umbrella type <code class="docutils literal notranslate"><span class="pre">Number</span></code>, sorting numbers can be more complex than anticipated.</p>
-<p>When sorting, the integer always comes before the equivalent float. For example, <code class="docutils literal notranslate"><span class="pre">1.0</span> <span class="pre">==</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">1.0</span> <span class="pre">&gt;=</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">1.0</span> <span class="pre">&lt;=</span> <span class="pre">1</span></code> all evaluate to true, but when sorting <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">1.0</span></code> are two _different_ values and <code class="docutils literal notranslate"><span class="pre">1</span></code> is placed before <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p>
-<p>This may create problems when applying aggregations since if a grouping key contains both <code class="docutils literal notranslate"><span class="pre">1.0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, they are treated as separate group headings. In such cases, it may help to use explicit coercion <code class="docutils literal notranslate"><span class="pre">to_float</span></code> or <code class="docutils literal notranslate"><span class="pre">round</span></code> to coerce all sorted values to the same type.</p>
+<p><code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">==</span> <span class="pre">1.0</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">true</span></code>, but <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">1.0</span></code> are distinct values,
+meaning that a relation can contain both as keys according to set semantics.
+This is especially confusing when using JavaScript, which converts all numbers to float,
+and python, which does not show a difference between the two when printing.
+Using floating point numbers in keys is not recommended if the rows are accessed by these keys
+(instead of accessed by iteration).</p>
 </div>
 </section>
-<section id="value-literals">
-<h2>Value literals<a class="headerlink" href="#value-literals" title="Permalink to this heading">#</a></h2>
-<p>The standard notations <code class="docutils literal notranslate"><span class="pre">null</span></code> for the type <code class="docutils literal notranslate"><span class="pre">Null</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code> and <code class="docutils literal notranslate"><span class="pre">true</span></code> for the type <code class="docutils literal notranslate"><span class="pre">Bool</span></code> are followed.</p>
+<section id="literals">
+<h2>Literals<a class="headerlink" href="#literals" title="Permalink to this heading">#</a></h2>
+<p>The standard notations <code class="docutils literal notranslate"><span class="pre">null</span></code> for the type <code class="docutils literal notranslate"><span class="pre">Null</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code> and <code class="docutils literal notranslate"><span class="pre">true</span></code> for the type <code class="docutils literal notranslate"><span class="pre">Bool</span></code> are used.</p>
 <p>Besides the usual decimal notation for signed integers,
-you can prefix a number with <code class="docutils literal notranslate"><span class="pre">0x</span></code> or <code class="docutils literal notranslate"><span class="pre">-0x</span></code> for hexadecimal notation,
-with <code class="docutils literal notranslate"><span class="pre">0o</span></code> or <code class="docutils literal notranslate"><span class="pre">-0o</span></code> for octal notation,
-or with <code class="docutils literal notranslate"><span class="pre">0b</span></code> or <code class="docutils literal notranslate"><span class="pre">-0b</span></code> for binary notation.
-Floating point numbers include the decimal dot, which may be trailing,
+you can prefix a number with <code class="docutils literal notranslate"><span class="pre">0x</span></code> or <code class="docutils literal notranslate"><span class="pre">-0x</span></code> for hexadecimal representation,
+with <code class="docutils literal notranslate"><span class="pre">0o</span></code> or <code class="docutils literal notranslate"><span class="pre">-0o</span></code> for octal,
+or with <code class="docutils literal notranslate"><span class="pre">0b</span></code> or <code class="docutils literal notranslate"><span class="pre">-0b</span></code> for binary.
+Floating point numbers include the decimal dot (may be trailing),
 and may be in scientific notation.
 All numbers may include underscores <code class="docutils literal notranslate"><span class="pre">_</span></code> in their representation for clarity.
 For example, <code class="docutils literal notranslate"><span class="pre">299_792_458</span></code> is the speed of light in meters per second.</p>
-<p>Strings can be typed in the same way as they do in JSON between double quotes <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>,
+<p>Strings can be typed in the same way as they do in JSON using double quotes <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>,
 with the same escape rules.
-You can also use single quotes <code class="docutils literal notranslate"><span class="pre">''</span></code> in which case the roles of the double quote and single quote are switched.
-In addition, there is a raw string notation:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">r___</span><span class="s2">&quot;I&#39;m a raw string with &quot;</span><span class="n">quotes</span><span class="s2">&quot;!&quot;</span><span class="n">___</span>
+You can also use single quotes <code class="docutils literal notranslate"><span class="pre">''</span></code> in which case the roles of double quotes and single quotes are switched.
+There is also a “raw string” notation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">___</span><span class="s2">&quot;I&#39;m a raw string&quot;</span><span class="n">___</span>
 </pre></div>
 </div>
-<p>A raw string starts with the letter <code class="docutils literal notranslate"><span class="pre">r</span></code> followed by an arbitrary number of underscores, and then a double quote.
+<p>A raw string starts with an arbitrary number of underscores, and then a double quote.
 It terminates when followed by a double quote and the same number of underscores.
-Everything in between is interpreted exactly as typed, including any newlines.</p>
-<p>There is no literal representation for <code class="docutils literal notranslate"><span class="pre">Bytes</span></code> or <code class="docutils literal notranslate"><span class="pre">Uuid</span></code> due to restrictions placed by JSON.
-You must pass in its Base64 encoding for bytes, or hyphened strings for UUIDs,
-and use the appropriate functions to decode it.
-If you are just inserting data into a stored relation with a column specified to contain bytes or UUIDs,
-auto-coercion will kick in.</p>
+Everything in between is interpreted exactly as typed, including any newlines.
+By varying the number of underscores, you can represent any string without quoting.</p>
+<p>There is no literal representation for <code class="docutils literal notranslate"><span class="pre">Bytes</span></code> or <code class="docutils literal notranslate"><span class="pre">Uuid</span></code>.
+Use the appropriate functions to create them.
+If you are inserting data into a stored relation with a column specified to contain bytes or UUIDs,
+auto-coercion will kick in and use <code class="docutils literal notranslate"><span class="pre">decode_base64</span></code> and <code class="docutils literal notranslate"><span class="pre">to_uuid</span></code> for conversion.</p>
 <p>Lists are items enclosed between square brackets <code class="docutils literal notranslate"><span class="pre">[]</span></code>, separated by commas.
 A trailing comma is allowed after the last item.</p>
 </section>
@@ -342,9 +347,9 @@ Composite types may contain other composite types or <code class="docutils liter
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Datatypes</a><ul>
-<li><a class="reference internal" href="#value-types">Value types</a></li>
-<li><a class="reference internal" href="#value-literals">Value literals</a></li>
+<li><a class="reference internal" href="#">Types</a><ul>
+<li><a class="reference internal" href="#runtime-types">Runtime types</a></li>
+<li><a class="reference internal" href="#literals">Literals</a></li>
 <li><a class="reference internal" href="#column-types">Column types</a></li>
 </ul>
 </li>
