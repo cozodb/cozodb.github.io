@@ -324,8 +324,24 @@ which must evaluate to a dictionary with string keys.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">%cozo_params</span></code> returns the parameters currently set.</p></li>
 </ul>
 </section>
-<section id="the-makeshift-javascript-console">
-<h3>The Makeshift JavaScript Console<a class="headerlink" href="#the-makeshift-javascript-console" title="Permalink to this heading">#</a></h3>
+<section id="python">
+<h3>Python<a class="headerlink" href="#python" title="Permalink to this heading">#</a></h3>
+<p>You can also use the Python client without JupyterLab. First:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pycozo</span>
+</pre></div>
+</div>
+<p>Next, in your Python code, do something like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycozo.client</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;http://127.0.0.1:9070&#39;</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dataframe</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;::relations&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">dataframe=True</span></code>, the client will transform the returned relation into Pandas dataframes, which must be separately installed.
+The <code class="docutils literal notranslate"><span class="pre">client.run</span></code> method also takes an optional second argument <code class="docutils literal notranslate"><span class="pre">params</span></code>.</p>
+</section>
+<section id="web-browser">
+<h3>Web Browser<a class="headerlink" href="#web-browser" title="Permalink to this heading">#</a></h3>
 <p>If you are reluctant to install python and Jupyter, you may consider the Makeshift JavaScript Console.
 To get started, you need a browser on your local machine.
 We recommend <a class="reference external" href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>, <a class="reference external" href="https://www.google.com/chrome/">Chrome</a>,
@@ -442,7 +458,8 @@ but again for <a class="reference external" href="https://pyo3.rs/">Python</a> a
 <li><a class="reference internal" href="#running-queries">Running queries</a><ul>
 <li><a class="reference internal" href="#making-http-requests">Making HTTP requests</a></li>
 <li><a class="reference internal" href="#jupyterlab">JupyterLab</a></li>
-<li><a class="reference internal" href="#the-makeshift-javascript-console">The Makeshift JavaScript Console</a></li>
+<li><a class="reference internal" href="#python">Python</a></li>
+<li><a class="reference internal" href="#web-browser">Web Browser</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-cozo-from-source">Building Cozo from source</a></li>
