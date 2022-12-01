@@ -1,0 +1,1149 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Aggregations" href="aggregations.html" /><link rel="prev" title="Query execution" href="execution.html" />
+        <link rel="canonical" href="/manual/functions.html" />
+
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+        <title>Functions - CozoScript</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">CozoScript</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">CozoScript</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Welcome</a></li>
+<li class="toctree-l1"><a class="reference internal" href="queries.html">Queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stored.html">Stored relations and transactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sysops.html">System ops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes.html">Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="execution.html">Query execution</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aggregations.html">Aggregations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Utilities and algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nonscript.html">Beyond CozoScript</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="functions">
+<h1>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h1>
+<p>Functions can be used to build expressions.</p>
+<p>In the following, all functions except those having names starting with <code class="docutils literal notranslate"><span class="pre">rand_</span></code> are deterministic.</p>
+<section id="equality-and-comparisons">
+<h2>Equality and Comparisons<a class="headerlink" href="#equality-and-comparisons" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.EqCmp.eq">
+<span class="sig-name descname"><span class="pre">eq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.EqCmp.eq" title="Permalink to this definition">#</a></dt>
+<dd><p>Equality comparison. The operator form is <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">y</span></code>. The two arguments of the equality can be of different types, in which case the result is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.EqCmp.neq">
+<span class="sig-name descname"><span class="pre">neq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.EqCmp.neq" title="Permalink to this definition">#</a></dt>
+<dd><p>Inequality comparison. The operator form is <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">!=</span> <span class="pre">y</span></code>. The two arguments of the equality can be of different types, in which case the result is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.EqCmp.gt">
+<span class="sig-name descname"><span class="pre">gt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.EqCmp.gt" title="Permalink to this definition">#</a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;</span> <span class="pre">y</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.EqCmp.ge">
+<span class="sig-name descname"><span class="pre">ge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.EqCmp.ge" title="Permalink to this definition">#</a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;=</span> <span class="pre">y</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.EqCmp.lt">
+<span class="sig-name descname"><span class="pre">lt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.EqCmp.lt" title="Permalink to this definition">#</a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">y</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.EqCmp.le">
+<span class="sig-name descname"><span class="pre">le</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.EqCmp.le" title="Permalink to this definition">#</a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;=</span> <span class="pre">y</span></code></p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The four comparison operators can only compare values of the same runtime type. Integers and floats are of the same type <code class="docutils literal notranslate"><span class="pre">Number</span></code>.</p>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.EqCmp.max">
+<span class="sig-name descname"><span class="pre">max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.EqCmp.max" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the maximum of the arguments. Can only be applied to numbers.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.EqCmp.min">
+<span class="sig-name descname"><span class="pre">min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.EqCmp.min" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the minimum of the arguments. Can only be applied to numbers.</p>
+</dd></dl>
+
+</section>
+<section id="boolean-functions">
+<h2>Boolean functions<a class="headerlink" href="#boolean-functions" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bool.and">
+<span class="sig-name descname"><span class="pre">and</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bool.and" title="Permalink to this definition">#</a></dt>
+<dd><p>Variadic conjunction. For binary arguments it is equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&amp;&amp;</span> <span class="pre">y</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bool.or">
+<span class="sig-name descname"><span class="pre">or</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bool.or" title="Permalink to this definition">#</a></dt>
+<dd><p>Variadic disjunction. For binary arguments it is equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">||</span> <span class="pre">y</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bool.negate">
+<span class="sig-name descname"><span class="pre">negate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bool.negate" title="Permalink to this definition">#</a></dt>
+<dd><p>Negation. Equivalent to <code class="docutils literal notranslate"><span class="pre">!x</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bool.assert">
+<span class="sig-name descname"><span class="pre">assert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bool.assert" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>, otherwise will raise an error containing all its arguments as the error message.</p>
+</dd></dl>
+
+</section>
+<section id="mathematics">
+<h2>Mathematics<a class="headerlink" href="#mathematics" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.add" title="Permalink to this definition">#</a></dt>
+<dd><p>Variadic addition. The binary version is the same as <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">+</span> <span class="pre">y</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.sub">
+<span class="sig-name descname"><span class="pre">sub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.sub" title="Permalink to this definition">#</a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">-</span> <span class="pre">y</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.mul">
+<span class="sig-name descname"><span class="pre">mul</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.mul" title="Permalink to this definition">#</a></dt>
+<dd><p>Variadic multiplication. The binary version is the same as <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">*</span> <span class="pre">y</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.div">
+<span class="sig-name descname"><span class="pre">div</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.div" title="Permalink to this definition">#</a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">/</span> <span class="pre">y</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.minus">
+<span class="sig-name descname"><span class="pre">minus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.minus" title="Permalink to this definition">#</a></dt>
+<dd><p>Equivalent to <code class="docutils literal notranslate"><span class="pre">-x</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.pow">
+<span class="sig-name descname"><span class="pre">pow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.pow" title="Permalink to this definition">#</a></dt>
+<dd><p>Raises <code class="docutils literal notranslate"><span class="pre">x</span></code> to the power of <code class="docutils literal notranslate"><span class="pre">y</span></code>. Equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">^</span> <span class="pre">y</span></code>. Always returns floating number.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.mod">
+<span class="sig-name descname"><span class="pre">mod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.mod" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the remainder when <code class="docutils literal notranslate"><span class="pre">x</span></code> is divided by <code class="docutils literal notranslate"><span class="pre">y</span></code>. Arguments can be floats. The returned value has the same sign as <code class="docutils literal notranslate"><span class="pre">x</span></code>.  Equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">%</span> <span class="pre">y</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.abs">
+<span class="sig-name descname"><span class="pre">abs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.abs" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the absolute value.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.signum">
+<span class="sig-name descname"><span class="pre">signum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.signum" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">-1</span></code>, whichever has the same sign as the argument, e.g. <code class="docutils literal notranslate"><span class="pre">signum(to_float('NEG_INFINITY'))</span> <span class="pre">==</span> <span class="pre">-1</span></code>, <code class="docutils literal notranslate"><span class="pre">signum(0.0)</span> <span class="pre">==</span> <span class="pre">0</span></code>, but <code class="docutils literal notranslate"><span class="pre">signum(-0.0)</span> <span class="pre">==</span> <span class="pre">-1</span></code>. Returns <code class="docutils literal notranslate"><span class="pre">NAN</span></code> when applied to <code class="docutils literal notranslate"><span class="pre">NAN</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.floor">
+<span class="sig-name descname"><span class="pre">floor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.floor" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the floor of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.ceil">
+<span class="sig-name descname"><span class="pre">ceil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.ceil" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the ceiling of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.round">
+<span class="sig-name descname"><span class="pre">round</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.round" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the nearest integer to the argument (represented as Float if the argument itself is a Float). Round halfway cases away from zero. E.g. <code class="docutils literal notranslate"><span class="pre">round(0.5)</span> <span class="pre">==</span> <span class="pre">1.0</span></code>, <code class="docutils literal notranslate"><span class="pre">round(-0.5)</span> <span class="pre">==</span> <span class="pre">-1.0</span></code>, <code class="docutils literal notranslate"><span class="pre">round(1.4)</span> <span class="pre">==</span> <span class="pre">1.0</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.exp">
+<span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.exp" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the exponential of the argument, natural base.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.exp2">
+<span class="sig-name descname"><span class="pre">exp2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.exp2" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the exponential base 2 of the argument. Always returns a float.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.ln">
+<span class="sig-name descname"><span class="pre">ln</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.ln" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the natual logarithm.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.log2">
+<span class="sig-name descname"><span class="pre">log2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.log2" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the logarithm base 2.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.log10">
+<span class="sig-name descname"><span class="pre">log10</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.log10" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the logarithm base 10.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.sin">
+<span class="sig-name descname"><span class="pre">sin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.sin" title="Permalink to this definition">#</a></dt>
+<dd><p>The sine trigonometric function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.cos">
+<span class="sig-name descname"><span class="pre">cos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.cos" title="Permalink to this definition">#</a></dt>
+<dd><p>The cosine trigonometric function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.tan">
+<span class="sig-name descname"><span class="pre">tan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.tan" title="Permalink to this definition">#</a></dt>
+<dd><p>The tangent trigonometric function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.asin">
+<span class="sig-name descname"><span class="pre">asin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.asin" title="Permalink to this definition">#</a></dt>
+<dd><p>The inverse sine.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.acos">
+<span class="sig-name descname"><span class="pre">acos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.acos" title="Permalink to this definition">#</a></dt>
+<dd><p>The inverse cosine.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.atan">
+<span class="sig-name descname"><span class="pre">atan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.atan" title="Permalink to this definition">#</a></dt>
+<dd><p>The inverse tangent.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.atan2">
+<span class="sig-name descname"><span class="pre">atan2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.atan2" title="Permalink to this definition">#</a></dt>
+<dd><p>The inverse tangent <a class="reference external" href="https://en.wikipedia.org/wiki/Atan2">atan2</a> by passing <cite>x</cite> and <cite>y</cite> separately.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.sinh">
+<span class="sig-name descname"><span class="pre">sinh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.sinh" title="Permalink to this definition">#</a></dt>
+<dd><p>The hyperbolic sine.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.cosh">
+<span class="sig-name descname"><span class="pre">cosh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.cosh" title="Permalink to this definition">#</a></dt>
+<dd><p>The hyperbolic cosine.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.tanh">
+<span class="sig-name descname"><span class="pre">tanh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.tanh" title="Permalink to this definition">#</a></dt>
+<dd><p>The hyperbolic tangent.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.asinh">
+<span class="sig-name descname"><span class="pre">asinh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.asinh" title="Permalink to this definition">#</a></dt>
+<dd><p>The inverse hyperbolic sine.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.acosh">
+<span class="sig-name descname"><span class="pre">acosh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.acosh" title="Permalink to this definition">#</a></dt>
+<dd><p>The inverse hyperbolic cosine.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.atanh">
+<span class="sig-name descname"><span class="pre">atanh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.atanh" title="Permalink to this definition">#</a></dt>
+<dd><p>The inverse hyperbolic tangent.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.deg_to_rad">
+<span class="sig-name descname"><span class="pre">deg_to_rad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.deg_to_rad" title="Permalink to this definition">#</a></dt>
+<dd><p>Converts degrees to radians.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.rad_to_deg">
+<span class="sig-name descname"><span class="pre">rad_to_deg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.rad_to_deg" title="Permalink to this definition">#</a></dt>
+<dd><p>Converts radians to degrees.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.haversine">
+<span class="sig-name descname"><span class="pre">haversine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_lon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.haversine" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes with the <a class="reference external" href="https://en.wikipedia.org/wiki/Haversine_formula">haversine formula</a>
+the angle measured in radians between two points <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> on a sphere
+specified by their latitudes and longitudes. The inputs are in radians.
+You probably want the next function when you are dealing with maps,
+since most maps measure angles in degrees instead of radians.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Math.haversine_deg_input">
+<span class="sig-name descname"><span class="pre">haversine_deg_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_lon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Math.haversine_deg_input" title="Permalink to this definition">#</a></dt>
+<dd><p>Same as the previous function, but the inputs are in degrees instead of radians.
+The return value is still in radians.</p>
+<p>If you want the approximate distance measured on the surface of the earth instead of the angle between two points,
+multiply the result by the radius of the earth,
+which is about <code class="docutils literal notranslate"><span class="pre">6371</span></code> kilometres, <code class="docutils literal notranslate"><span class="pre">3959</span></code> miles, or <code class="docutils literal notranslate"><span class="pre">3440</span></code> nautical miles.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The haversine formula, when applied to the surface of the earth, which is not a perfect sphere, can result in an error of less than one percent.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="string-functions">
+<h2>String functions<a class="headerlink" href="#string-functions" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.length">
+<span class="sig-name descname"><span class="pre">length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.length" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the number of Unicode characters in the string.</p>
+<p>Can also be applied to a list or a byte array.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">length(str)</span></code> does not return the number of bytes of the string representation.
+Also, what is returned depends on the normalization of the string.
+So if such details are important, apply <code class="docutils literal notranslate"><span class="pre">unicode_normalize</span></code> before <code class="docutils literal notranslate"><span class="pre">length</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.concat">
+<span class="sig-name descname"><span class="pre">concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.concat" title="Permalink to this definition">#</a></dt>
+<dd><p>Concatenates strings. Equivalent to <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">++</span> <span class="pre">y</span></code> in the binary case.</p>
+<p>Can also be applied to lists.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.str_includes">
+<span class="sig-name descname"><span class="pre">str_includes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.str_includes" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span></code> contains the substring <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.lowercase">
+<span class="sig-name descname"><span class="pre">lowercase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.lowercase" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert to lowercase. Supports Unicode.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.uppercase">
+<span class="sig-name descname"><span class="pre">uppercase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.uppercase" title="Permalink to this definition">#</a></dt>
+<dd><p>Converts to uppercase. Supports Unicode.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.trim">
+<span class="sig-name descname"><span class="pre">trim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.trim" title="Permalink to this definition">#</a></dt>
+<dd><p>Removes <a class="reference external" href="https://en.wikipedia.org/wiki/Whitespace_character">whitespace</a> from both ends of the string.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.trim_start">
+<span class="sig-name descname"><span class="pre">trim_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.trim_start" title="Permalink to this definition">#</a></dt>
+<dd><p>Removes <a class="reference external" href="https://en.wikipedia.org/wiki/Whitespace_character">whitespace</a> from the start of the string.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.trim_end">
+<span class="sig-name descname"><span class="pre">trim_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.trim_end" title="Permalink to this definition">#</a></dt>
+<dd><p>Removes <a class="reference external" href="https://en.wikipedia.org/wiki/Whitespace_character">whitespace</a> from the end of the string.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.starts_with">
+<span class="sig-name descname"><span class="pre">starts_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.starts_with" title="Permalink to this definition">#</a></dt>
+<dd><p>Tests if <code class="docutils literal notranslate"><span class="pre">x</span></code> starts with <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><code class="docutils literal notranslate"><span class="pre">starts_with(var,</span> <span class="pre">str)</span></code> is preferred over equivalent (e.g. regex) conditions,
+since the compiler may more easily compile the clause into a range scan.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.ends_with">
+<span class="sig-name descname"><span class="pre">ends_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.ends_with" title="Permalink to this definition">#</a></dt>
+<dd><p>tests if <code class="docutils literal notranslate"><span class="pre">x</span></code>  ends with <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.unicode_normalize">
+<span class="sig-name descname"><span class="pre">unicode_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.unicode_normalize" title="Permalink to this definition">#</a></dt>
+<dd><p>Converts <code class="docutils literal notranslate"><span class="pre">str</span></code> to the <a class="reference external" href="https://en.wikipedia.org/wiki/Unicode_equivalence">normalization</a> specified by <code class="docutils literal notranslate"><span class="pre">norm</span></code>.
+The valid values of <code class="docutils literal notranslate"><span class="pre">norm</span></code> are <code class="docutils literal notranslate"><span class="pre">'nfc'</span></code>, <code class="docutils literal notranslate"><span class="pre">'nfd'</span></code>, <code class="docutils literal notranslate"><span class="pre">'nfkc'</span></code> and <code class="docutils literal notranslate"><span class="pre">'nfkd'</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.chars">
+<span class="sig-name descname"><span class="pre">chars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.chars" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns Unicode characters of the string as a list of substrings.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.String.from_substrings">
+<span class="sig-name descname"><span class="pre">from_substrings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.String.from_substrings" title="Permalink to this definition">#</a></dt>
+<dd><p>Combines the strings in <code class="docutils literal notranslate"><span class="pre">list</span></code> into a big string. In a sense, it is the inverse function of <code class="docutils literal notranslate"><span class="pre">chars</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you want substring slices, indexing strings, etc., first convert the string to a list with <code class="docutils literal notranslate"><span class="pre">chars</span></code>,
+do the manipulation on the list, and then recombine with <code class="docutils literal notranslate"><span class="pre">from_substring</span></code>.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="list-functions">
+<h2>List functions<a class="headerlink" href="#list-functions" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.list">
+<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.list" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a list from its argument, e.g. <code class="docutils literal notranslate"><span class="pre">list(1,</span> <span class="pre">2,</span> <span class="pre">3)</span></code>. Equivalent to the literal form <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.is_in">
+<span class="sig-name descname"><span class="pre">is_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.is_in" title="Permalink to this definition">#</a></dt>
+<dd><p>Tests the membership of an element in a list.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.first">
+<span class="sig-name descname"><span class="pre">first</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.first" title="Permalink to this definition">#</a></dt>
+<dd><p>Extracts the first element of the list. Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if given an empty list.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.last">
+<span class="sig-name descname"><span class="pre">last</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.last" title="Permalink to this definition">#</a></dt>
+<dd><p>Extracts the last element of the list. Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if given an empty list.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.get" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the element at index <code class="docutils literal notranslate"><span class="pre">n</span></code> in the list <code class="docutils literal notranslate"><span class="pre">l</span></code>. Raises an error if the access is out of bounds. Indices start with 0.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.maybe_get">
+<span class="sig-name descname"><span class="pre">maybe_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.maybe_get" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the element at index <code class="docutils literal notranslate"><span class="pre">n</span></code> in the list <code class="docutils literal notranslate"><span class="pre">l</span></code>. Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if the access is out of bounds. Indices start with 0.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.length">
+<span class="sig-name descname"><span class="pre">length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.length" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the length of the list.</p>
+<p>Can also be applied to a string or a byte array.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.slice">
+<span class="sig-name descname"><span class="pre">slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.slice" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the slice of list between the index <code class="docutils literal notranslate"><span class="pre">start</span></code> (inclusive) and <code class="docutils literal notranslate"><span class="pre">end</span></code> (exclusive).
+Negative numbers may be used, which is interpreted as counting from the end of the list.
+E.g. <code class="docutils literal notranslate"><span class="pre">slice([1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4],</span> <span class="pre">1,</span> <span class="pre">3)</span> <span class="pre">==</span> <span class="pre">[2,</span> <span class="pre">3]</span></code>, <code class="docutils literal notranslate"><span class="pre">slice([1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4],</span> <span class="pre">1,</span> <span class="pre">-1)</span> <span class="pre">==</span> <span class="pre">[2,</span> <span class="pre">3]</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.concat">
+<span class="sig-name descname"><span class="pre">concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.concat" title="Permalink to this definition">#</a></dt>
+<dd><p>Concatenates lists. The binary case is equivalent to <cite>x ++ y</cite>.</p>
+<p>Can also be applied to strings.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.prepend">
+<span class="sig-name descname"><span class="pre">prepend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.prepend" title="Permalink to this definition">#</a></dt>
+<dd><p>Prepends <code class="docutils literal notranslate"><span class="pre">x</span></code> to <code class="docutils literal notranslate"><span class="pre">l</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.append" title="Permalink to this definition">#</a></dt>
+<dd><p>Appends <code class="docutils literal notranslate"><span class="pre">x</span></code> to <code class="docutils literal notranslate"><span class="pre">l</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.reverse">
+<span class="sig-name descname"><span class="pre">reverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.reverse" title="Permalink to this definition">#</a></dt>
+<dd><p>Reverses the list.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.sorted">
+<span class="sig-name descname"><span class="pre">sorted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.sorted" title="Permalink to this definition">#</a></dt>
+<dd><p>Sorts the list and returns the sorted copy.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.chunks">
+<span class="sig-name descname"><span class="pre">chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.chunks" title="Permalink to this definition">#</a></dt>
+<dd><p>Splits the list <code class="docutils literal notranslate"><span class="pre">l</span></code> into chunks of <code class="docutils literal notranslate"><span class="pre">n</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">chunks([1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5],</span> <span class="pre">2)</span> <span class="pre">==</span> <span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3,</span> <span class="pre">4],</span> <span class="pre">[5]]</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.chunks_exact">
+<span class="sig-name descname"><span class="pre">chunks_exact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.chunks_exact" title="Permalink to this definition">#</a></dt>
+<dd><p>Splits the list <code class="docutils literal notranslate"><span class="pre">l</span></code> into chunks of <code class="docutils literal notranslate"><span class="pre">n</span></code>, discarding any trailing elements, e.g. <code class="docutils literal notranslate"><span class="pre">chunks([1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5],</span> <span class="pre">2)</span> <span class="pre">==</span> <span class="pre">[[1,</span> <span class="pre">2],</span> <span class="pre">[3,</span> <span class="pre">4]]</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.windows">
+<span class="sig-name descname"><span class="pre">windows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.windows" title="Permalink to this definition">#</a></dt>
+<dd><p>Splits the list <code class="docutils literal notranslate"><span class="pre">l</span></code> into overlapping windows of length <code class="docutils literal notranslate"><span class="pre">n</span></code>. e.g. <code class="docutils literal notranslate"><span class="pre">windows([1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5],</span> <span class="pre">3)</span> <span class="pre">==</span> <span class="pre">[[1,</span> <span class="pre">2,</span> <span class="pre">3],</span> <span class="pre">[2,</span> <span class="pre">3,</span> <span class="pre">4],</span> <span class="pre">[3,</span> <span class="pre">4,</span> <span class="pre">5]]</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.union" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes the set-theoretic union of all the list arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.intersection">
+<span class="sig-name descname"><span class="pre">intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.intersection" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes the set-theoretic intersection of all the list arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.List.difference">
+<span class="sig-name descname"><span class="pre">difference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.List.difference" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes the set-theoretic difference of the first argument with respect to the rest.</p>
+</dd></dl>
+
+</section>
+<section id="binary-functions">
+<h2>Binary functions<a class="headerlink" href="#binary-functions" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bin.length">
+<span class="sig-name descname"><span class="pre">length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bin.length" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the length of the byte array.</p>
+<p>Can also be applied to a list or a string.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bin.bit_and">
+<span class="sig-name descname"><span class="pre">bit_and</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bin.bit_and" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate the bitwise and. The two bytes must have the same lengths.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bin.bit_or">
+<span class="sig-name descname"><span class="pre">bit_or</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bin.bit_or" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate the bitwise or. The two bytes must have the same lengths.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bin.bit_not">
+<span class="sig-name descname"><span class="pre">bit_not</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bin.bit_not" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate the bitwise not.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bin.bit_xor">
+<span class="sig-name descname"><span class="pre">bit_xor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bin.bit_xor" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate the bitwise xor. The two bytes must have the same lengths.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bin.pack_bits">
+<span class="sig-name descname"><span class="pre">pack_bits</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">...</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bin.pack_bits" title="Permalink to this definition">#</a></dt>
+<dd><p>packs a list of booleans into a byte array; if the list is not divisible by 8, it is padded with <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bin.unpack_bits">
+<span class="sig-name descname"><span class="pre">unpack_bits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bin.unpack_bits" title="Permalink to this definition">#</a></dt>
+<dd><p>Unpacks a byte array into a list of booleans.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bin.encode_base64">
+<span class="sig-name descname"><span class="pre">encode_base64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bin.encode_base64" title="Permalink to this definition">#</a></dt>
+<dd><p>Encodes the byte array <code class="docutils literal notranslate"><span class="pre">b</span></code> into the <a class="reference external" href="https://en.wikipedia.org/wiki/Base64">Base64</a>-encoded string.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">encode_base64</span></code> is automatically applied when output to JSON since JSON cannot represent bytes natively.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Bin.decode_base64">
+<span class="sig-name descname"><span class="pre">decode_base64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Bin.decode_base64" title="Permalink to this definition">#</a></dt>
+<dd><p>Tries to decode the <code class="docutils literal notranslate"><span class="pre">str</span></code> as a <a class="reference external" href="https://en.wikipedia.org/wiki/Base64">Base64</a>-encoded byte array.</p>
+</dd></dl>
+
+</section>
+<section id="type-checking-and-conversions">
+<h2>Type checking and conversions<a class="headerlink" href="#type-checking-and-conversions" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.to_string">
+<span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.to_string" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert <code class="docutils literal notranslate"><span class="pre">x</span></code> to a string: the argument is unchanged if it is already a string, otherwise its JSON string representation will be returned.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.to_float">
+<span class="sig-name descname"><span class="pre">to_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.to_float" title="Permalink to this definition">#</a></dt>
+<dd><p>Tries to convert <code class="docutils literal notranslate"><span class="pre">x</span></code> to a float. Conversion from numbers always succeeds. Conversion from strings has the following special cases in addition to the usual string representation:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">INF</span></code> is converted to infinity;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NEG_INF</span></code> is converted to negative infinity;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NAN</span></code> is converted to NAN (but don’t compare NAN by equality, use <code class="docutils literal notranslate"><span class="pre">is_nan</span></code> instead);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PI</span></code> is converted to pi (3.14159…);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">E</span></code> is converted to the base of natural logarithms, or Euler’s constant (2.71828…).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.to_bool">
+<span class="sig-name descname"><span class="pre">to_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.to_bool" title="Permalink to this definition">#</a></dt>
+<dd><p>Tries to convert <code class="docutils literal notranslate"><span class="pre">x</span></code> to a boolean. The following are converted to <code class="docutils literal notranslate"><span class="pre">false</span></code>, and everything else is converted to <code class="docutils literal notranslate"><span class="pre">true</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">null</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> (empty string)</p></li>
+<li><p>the empty byte array</p></li>
+<li><p>the nil UUID (all zeros)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[]</span></code> (the empty list)</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.to_uuid">
+<span class="sig-name descname"><span class="pre">to_uuid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.to_uuid" title="Permalink to this definition">#</a></dt>
+<dd><p>Tries to convert <code class="docutils literal notranslate"><span class="pre">x</span></code> to a UUID. The input must either be a hyphenated UUID string representation or already a UUID for it to succeed.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.uuid_timestamp">
+<span class="sig-name descname"><span class="pre">uuid_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.uuid_timestamp" title="Permalink to this definition">#</a></dt>
+<dd><p>Extracts the timestamp from a UUID version 1, as seconds since the UNIX epoch. If the UUID is not of version 1, <code class="docutils literal notranslate"><span class="pre">null</span></code> is returned. If <code class="docutils literal notranslate"><span class="pre">x</span></code> is not a UUID, an error is raised.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.is_null">
+<span class="sig-name descname"><span class="pre">is_null</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.is_null" title="Permalink to this definition">#</a></dt>
+<dd><p>Checks for <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.is_int">
+<span class="sig-name descname"><span class="pre">is_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.is_int" title="Permalink to this definition">#</a></dt>
+<dd><p>Checks for integers.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.is_float">
+<span class="sig-name descname"><span class="pre">is_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.is_float" title="Permalink to this definition">#</a></dt>
+<dd><p>Checks for floats.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.is_finite">
+<span class="sig-name descname"><span class="pre">is_finite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.is_finite" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span></code> is an integer or a finite float.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.is_infinite">
+<span class="sig-name descname"><span class="pre">is_infinite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.is_infinite" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span></code> is infinity or negative infinity.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.is_nan">
+<span class="sig-name descname"><span class="pre">is_nan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.is_nan" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span></code> is the special float <code class="docutils literal notranslate"><span class="pre">NAN</span></code>. Returns <code class="docutils literal notranslate"><span class="pre">false</span></code> when the argument is not of number type.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.is_num">
+<span class="sig-name descname"><span class="pre">is_num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.is_num" title="Permalink to this definition">#</a></dt>
+<dd><p>Checks for numbers.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.is_bytes">
+<span class="sig-name descname"><span class="pre">is_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.is_bytes" title="Permalink to this definition">#</a></dt>
+<dd><p>Checks for bytes.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.is_list">
+<span class="sig-name descname"><span class="pre">is_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.is_list" title="Permalink to this definition">#</a></dt>
+<dd><p>Checks for lists.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.is_string">
+<span class="sig-name descname"><span class="pre">is_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.is_string" title="Permalink to this definition">#</a></dt>
+<dd><p>Checks for strings.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Typing.is_uuid">
+<span class="sig-name descname"><span class="pre">is_uuid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Typing.is_uuid" title="Permalink to this definition">#</a></dt>
+<dd><p>Checks for UUIDs.</p>
+</dd></dl>
+
+</section>
+<section id="random-functions">
+<h2>Random functions<a class="headerlink" href="#random-functions" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Rand.rand_float">
+<span class="sig-name descname"><span class="pre">rand_float</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Func.Rand.rand_float" title="Permalink to this definition">#</a></dt>
+<dd><p>Generates a float in the interval [0, 1], sampled uniformly.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Rand.rand_bernoulli">
+<span class="sig-name descname"><span class="pre">rand_bernoulli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Rand.rand_bernoulli" title="Permalink to this definition">#</a></dt>
+<dd><p>Generates a boolean with probability <code class="docutils literal notranslate"><span class="pre">p</span></code> of being <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Rand.rand_int">
+<span class="sig-name descname"><span class="pre">rand_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Rand.rand_int" title="Permalink to this definition">#</a></dt>
+<dd><p>Generates an integer within the given bounds, both bounds are inclusive.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Rand.rand_choose">
+<span class="sig-name descname"><span class="pre">rand_choose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Rand.rand_choose" title="Permalink to this definition">#</a></dt>
+<dd><p>Randomly chooses an element from <code class="docutils literal notranslate"><span class="pre">list</span></code> and returns it. If the list is empty, it returns <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Rand.rand_uuid_v1">
+<span class="sig-name descname"><span class="pre">rand_uuid_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Func.Rand.rand_uuid_v1" title="Permalink to this definition">#</a></dt>
+<dd><p>Generate a random UUID, version 1 (random bits plus timestamp).
+The resolution of the timestamp part is much coarser on WASM targets than the others.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Rand.rand_uuid_v4">
+<span class="sig-name descname"><span class="pre">rand_uuid_v4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Func.Rand.rand_uuid_v4" title="Permalink to this definition">#</a></dt>
+<dd><p>Generate a random UUID, version 4 (completely random bits).</p>
+</dd></dl>
+
+</section>
+<section id="regex-functions">
+<h2>Regex functions<a class="headerlink" href="#regex-functions" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Regex.regex_matches">
+<span class="sig-name descname"><span class="pre">regex_matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Regex.regex_matches" title="Permalink to this definition">#</a></dt>
+<dd><p>Tests if <code class="docutils literal notranslate"><span class="pre">x</span></code> matches the regular expression <code class="docutils literal notranslate"><span class="pre">reg</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Regex.regex_replace">
+<span class="sig-name descname"><span class="pre">regex_replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Regex.regex_replace" title="Permalink to this definition">#</a></dt>
+<dd><p>Replaces the first occurrence of the pattern <code class="docutils literal notranslate"><span class="pre">reg</span></code> in <code class="docutils literal notranslate"><span class="pre">x</span></code> with <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Regex.regex_replace_all">
+<span class="sig-name descname"><span class="pre">regex_replace_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Regex.regex_replace_all" title="Permalink to this definition">#</a></dt>
+<dd><p>Replaces all occurrences of the pattern <code class="docutils literal notranslate"><span class="pre">reg</span></code> in <code class="docutils literal notranslate"><span class="pre">x</span></code> with <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Regex.regex_extract">
+<span class="sig-name descname"><span class="pre">regex_extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Regex.regex_extract" title="Permalink to this definition">#</a></dt>
+<dd><p>Extracts all occurrences of the pattern <code class="docutils literal notranslate"><span class="pre">reg</span></code> in <code class="docutils literal notranslate"><span class="pre">x</span></code> and returns them in a list.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Regex.regex_extract_first">
+<span class="sig-name descname"><span class="pre">regex_extract_first</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Regex.regex_extract_first" title="Permalink to this definition">#</a></dt>
+<dd><p>Extracts the first occurrence of the pattern <code class="docutils literal notranslate"><span class="pre">reg</span></code> in <code class="docutils literal notranslate"><span class="pre">x</span></code> and returns it. If none is found, returns <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+</dd></dl>
+
+<section id="regex-syntax">
+<h3>Regex syntax<a class="headerlink" href="#regex-syntax" title="Permalink to this heading">#</a></h3>
+<p>Matching one character:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.             any character except new line
+\d            digit (\p{Nd})
+\D            not digit
+\pN           One-letter name Unicode character class
+\p{Greek}     Unicode character class (general category or script)
+\PN           Negated one-letter name Unicode character class
+\P{Greek}     negated Unicode character class (general category or script)
+</pre></div>
+</div>
+<p>Character classes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[xyz]         A character class matching either x, y or z (union).
+[^xyz]        A character class matching any character except x, y and z.
+[a-z]         A character class matching any character in range a-z.
+[[:alpha:]]   ASCII character class ([A-Za-z])
+[[:^alpha:]]  Negated ASCII character class ([^A-Za-z])
+[x[^xyz]]     Nested/grouping character class (matching any character except y and z)
+[a-y&amp;&amp;xyz]    Intersection (matching x or y)
+[0-9&amp;&amp;[^4]]   Subtraction using intersection and negation (matching 0-9 except 4)
+[0-9--4]      Direct subtraction (matching 0-9 except 4)
+[a-g~~b-h]    Symmetric difference (matching `a` and `h` only)
+[\[\]]        Escaping in character classes (matching [ or ])
+</pre></div>
+</div>
+<p>Composites:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xy</span>    <span class="n">concatenation</span> <span class="p">(</span><span class="n">x</span> <span class="n">followed</span> <span class="n">by</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">x</span><span class="o">|</span><span class="n">y</span>   <span class="n">alternation</span> <span class="p">(</span><span class="n">x</span> <span class="ow">or</span> <span class="n">y</span><span class="p">,</span> <span class="n">prefer</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Repetitions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>x*        zero or more of x (greedy)
+x+        one or more of x (greedy)
+x?        zero or one of x (greedy)
+x*?       zero or more of x (ungreedy/lazy)
+x+?       one or more of x (ungreedy/lazy)
+x??       zero or one of x (ungreedy/lazy)
+x{n,m}    at least n x and at most m x (greedy)
+x{n,}     at least n x (greedy)
+x{n}      exactly n x
+x{n,m}?   at least n x and at most m x (ungreedy/lazy)
+x{n,}?    at least n x (ungreedy/lazy)
+x{n}?     exactly n x
+</pre></div>
+</div>
+<p>Empty matches:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>^     the beginning of the text
+$     the end of the text
+\A    only the beginning of the text
+\z    only the end of the text
+\b    a Unicode word boundary (\w on one side and \W, \A, or \z on the other)
+\B    not a Unicode word boundary
+</pre></div>
+</div>
+</section>
+</section>
+<section id="timestamp-functions">
+<h2>Timestamp functions<a class="headerlink" href="#timestamp-functions" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Regex.now">
+<span class="sig-name descname"><span class="pre">now</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Func.Regex.now" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the current timestamp as seconds since the UNIX epoch.
+The resolution is much coarser on WASM targets than the others.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Regex.format_timestamp">
+<span class="sig-name descname"><span class="pre">format_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tz?</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Regex.format_timestamp" title="Permalink to this definition">#</a></dt>
+<dd><p>Interpret <code class="docutils literal notranslate"><span class="pre">ts</span></code> as seconds since the epoch and format as a string according to <a class="reference external" href="https://www.rfc-editor.org/rfc/rfc3339">RFC3339</a>.</p>
+<p>If a second string argument is provided, it is interpreted as a <a class="reference external" href="https://en.wikipedia.org/wiki/Tz_database">timezone</a> and used to format the timestamp.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Func.Regex.parse_timestamp">
+<span class="sig-name descname"><span class="pre">parse_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Func.Regex.parse_timestamp" title="Permalink to this definition">#</a></dt>
+<dd><p>Parse <code class="docutils literal notranslate"><span class="pre">str</span></code> into seconds since the epoch according to RFC3339.</p>
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="aggregations.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Aggregations</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="execution.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Query execution</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Ziyang Hu
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Functions</a><ul>
+<li><a class="reference internal" href="#equality-and-comparisons">Equality and Comparisons</a></li>
+<li><a class="reference internal" href="#boolean-functions">Boolean functions</a></li>
+<li><a class="reference internal" href="#mathematics">Mathematics</a></li>
+<li><a class="reference internal" href="#string-functions">String functions</a></li>
+<li><a class="reference internal" href="#list-functions">List functions</a></li>
+<li><a class="reference internal" href="#binary-functions">Binary functions</a></li>
+<li><a class="reference internal" href="#type-checking-and-conversions">Type checking and conversions</a></li>
+<li><a class="reference internal" href="#random-functions">Random functions</a></li>
+<li><a class="reference internal" href="#regex-functions">Regex functions</a><ul>
+<li><a class="reference internal" href="#regex-syntax">Regex syntax</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#timestamp-functions">Timestamp functions</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>
