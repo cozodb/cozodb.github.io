@@ -1,10 +1,10 @@
 {
   "files": {
     "main.css": "./static/css/main.bcdc1b32.css",
-    "main.js": "./static/js/main.55865f58.js",
+    "main.js": "./static/js/main.81e18bb3.js",
     "static/js/529.0a63228b.chunk.js": "./static/js/529.0a63228b.chunk.js",
     "static/js/787.59ae8f13.chunk.js": "./static/js/787.59ae8f13.chunk.js",
-    "static/media/cozo_lib_wasm_bg.wasm": "./static/media/cozo_lib_wasm_bg.9105b9676b1c35141f50.wasm",
+    "static/media/cozo_lib_wasm_bg.wasm": "./static/media/cozo_lib_wasm_bg.3d78f9a0b91b5f121268.wasm",
     "static/media/blueprint-icons-20.svg?": "./static/media/blueprint-icons-20.427fd0e891d2f22f9b9c.svg",
     "static/media/blueprint-icons-16.svg?": "./static/media/blueprint-icons-16.314b7752314ee7fc94bd.svg",
     "static/media/blueprint-icons-20.eot?": "./static/media/blueprint-icons-20.5e4c0405ed6ed9b8dccd.eot",
@@ -17,12 +17,12 @@
     "static/media/blueprint-icons-16.woff2?": "./static/media/blueprint-icons-16.79a4001b654c178d82ff.woff2",
     "index.html": "./index.html",
     "main.bcdc1b32.css.map": "./static/css/main.bcdc1b32.css.map",
-    "main.55865f58.js.map": "./static/js/main.55865f58.js.map",
+    "main.81e18bb3.js.map": "./static/js/main.81e18bb3.js.map",
     "529.0a63228b.chunk.js.map": "./static/js/529.0a63228b.chunk.js.map",
     "787.59ae8f13.chunk.js.map": "./static/js/787.59ae8f13.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.bcdc1b32.css",
-    "static/js/main.55865f58.js"
+    "static/js/main.81e18bb3.js"
   ]
 }
